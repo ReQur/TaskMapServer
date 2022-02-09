@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "NZuEkSQ5iJKe7eodLnm916aqO20icWFmy4PL4Xy4uQHFCruha8eS57vcgYHh7ZtKKBkqlTCwt3nS7YdJoMbTXw==",
+  "success": true,
+  "projectFilePath": "A:\\mming\\dotnetserver\\dotnetserver.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Computer\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.18\\microsoft.netcore.app.host.win-x64.3.1.18.nupkg.sha512"
+  ],
+  "logs": []
+}
