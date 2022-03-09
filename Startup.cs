@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotnetserver.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,7 +35,7 @@ namespace dotnetserver
                         builder.WithOrigins("http://localhost:4200");
                     });
             });
-
+            services.AddSignalR();
             services.AddControllers();
 
             services.AddScoped<ITimeService, TimeService>();
@@ -48,17 +49,24 @@ namespace dotnetserver
                 app.UseDeveloperExceptionPage();
             }
 
+            //app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials());
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.UseCors(MyAllowSpecificOrigins);
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MainHub>("/hub");
             });
         }
     }
