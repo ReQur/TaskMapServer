@@ -1,6 +1,6 @@
 using System;
 
-namespace dotnetserver
+namespace dotnetserver.Models
 {
     public class WeatherForecast
     {
