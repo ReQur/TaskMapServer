@@ -7,7 +7,7 @@ using System.Text;
 
 namespace dotnetserver.Models
 {
-    public class Task
+    public class BoardTask
     {
         public uint TaskId;
         public uint BoardId;
