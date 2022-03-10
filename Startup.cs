@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using dotnetserver.Controllers;
+using dotnetserver.Malware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,7 +33,11 @@ namespace dotnetserver
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                     builder =>
                     {
+                        builder.WithOrigins("http://localhost:4201");
                         builder.WithOrigins("http://localhost:4200");
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyHeader();
+                        builder.AllowCredentials();
                     });
             });
             services.AddSignalR();
@@ -49,13 +54,9 @@ namespace dotnetserver
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors(MyAllowSpecificOrigins);
 
-            app.UseCors(x => x
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .SetIsOriginAllowed(origin => true)
-                .AllowCredentials());
+            app.UseMiddleware<LogEtery>();
 
             app.UseHttpsRedirection();
 

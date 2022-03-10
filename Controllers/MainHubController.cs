@@ -39,7 +39,7 @@ namespace dotnetserver.Controllers
         public async Task NewMessage(string groupName, string message)
         {
             Console.WriteLine(message);
-            await Clients.All.SendAsync("newMessage", message);
+            await Clients.Others.SendAsync("newMessage", message);
         }
     }
 }
