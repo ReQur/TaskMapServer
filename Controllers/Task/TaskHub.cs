@@ -4,16 +4,12 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-using dotnetserver.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace dotnetserver.Controllers
 {
-    public class TaskHub: Hub
+    public class MainHub: Hub
     {
-        private static List<BoardTask> Tasks = new List<BoardTask>();
-
-
         private static readonly Dictionary<string, string> ConnectionsGroup = new Dictionary<string, string>();
 
         public override async Task OnConnectedAsync()
@@ -29,26 +25,21 @@ namespace dotnetserver.Controllers
             }
             await base.OnDisconnectedAsync(exception);
         }
-        public async Task JoinBoard(string boardId)
+        public async Task JoinGroup(string group)
         {
             if (ConnectionsGroup.ContainsKey(Context.ConnectionId))
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, ConnectionsGroup[Context.ConnectionId]);
                 ConnectionsGroup.Remove(Context.ConnectionId);
             }
-            ConnectionsGroup.Add(Context.ConnectionId, boardId);
-            await Groups.AddToGroupAsync(Context.ConnectionId, boardId);
+            ConnectionsGroup.Add(Context.ConnectionId, group);
+            await Groups.AddToGroupAsync(Context.ConnectionId, group);
         }
 
-        public async Task NewTaskPosition(string boardId, string message)
+        public async Task NewMessage(string groupName, string message)
         {
             Console.WriteLine(message);
-            await Clients.OthersInGroup(boardId).SendAsync("newTaskPosition", message);
-        }
-
-        public async Task GetTasks(string boardId)
-        {
-            await Clients.Caller.SendAsync("getTasks", Tasks.Where(task => task.BoardId == int.Parse(boardId)));
+            await Clients.Others.SendAsync("newMessage", message);
         }
     }
 }

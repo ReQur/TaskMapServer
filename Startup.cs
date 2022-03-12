@@ -67,6 +67,7 @@ namespace dotnetserver
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<TaskHub>("/hub/Task");
                 endpoints.MapHub<MainHub>("/hub");
             });
         }

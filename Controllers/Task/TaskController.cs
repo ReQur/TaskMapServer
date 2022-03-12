@@ -15,10 +15,7 @@ namespace dotnetserver.Controllers
     [Route("[controller]")]
     public class TaskController : ControllerBase
     {
-        private static List<BoardTask> Tasks = new List<BoardTask>();
-
         private readonly ILogger<TaskController> _logger;
-        private readonly ITimeService _timeService;
 
         public TaskController(ILogger<TaskController> logger)
         {
@@ -26,9 +23,9 @@ namespace dotnetserver.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Array> Get()
+        public IEnumerable<BoardTask> GetTasks(string boardId)
         {
-            return null;
+            return TaskService.GetBoardTasks(boardId);
         }
     }
 
