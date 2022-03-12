@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotnetserver.Controllers;
+using dotnetserver.Malware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,10 +33,14 @@ namespace dotnetserver
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                     builder =>
                     {
+                        builder.WithOrigins("http://localhost:4201");
                         builder.WithOrigins("http://localhost:4200");
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyHeader();
+                        builder.AllowCredentials();
                     });
             });
-
+            services.AddSignalR();
             services.AddControllers();
 
             services.AddScoped<ITimeService, TimeService>();
@@ -48,17 +54,20 @@ namespace dotnetserver
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseMiddleware<LogEtery>();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.UseCors(MyAllowSpecificOrigins);
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MainHub>("/hub");
             });
         }
     }

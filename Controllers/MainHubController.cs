@@ -38,7 +38,8 @@ namespace dotnetserver.Controllers
 
         public async Task NewMessage(string groupName, string message)
         {
-            await Clients.OthersInGroup(groupName).SendAsync("newMessage", message);
+            Console.WriteLine(message);
+            await Clients.Others.SendAsync("newMessage", message);
         }
     }
 }
