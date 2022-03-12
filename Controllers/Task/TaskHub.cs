@@ -4,11 +4,12 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using dotnetserver.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace dotnetserver.Controllers
 {
-    public class MainHub: Hub
+    public class TaskHub: Hub
     {
         private static readonly Dictionary<string, string> ConnectionsGroup = new Dictionary<string, string>();
 
@@ -25,21 +26,22 @@ namespace dotnetserver.Controllers
             }
             await base.OnDisconnectedAsync(exception);
         }
-        public async Task JoinGroup(string group)
+        public async Task JoinBoard(string boardId)
         {
             if (ConnectionsGroup.ContainsKey(Context.ConnectionId))
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, ConnectionsGroup[Context.ConnectionId]);
                 ConnectionsGroup.Remove(Context.ConnectionId);
             }
-            ConnectionsGroup.Add(Context.ConnectionId, group);
-            await Groups.AddToGroupAsync(Context.ConnectionId, group);
+            ConnectionsGroup.Add(Context.ConnectionId, boardId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, boardId);
         }
-
-        public async Task NewMessage(string groupName, string message)
+        public async Task NewTaskPosition(string boardId, string taskCoordinates)
         {
-            Console.WriteLine(message);
-            await Clients.Others.SendAsync("newMessage", message);
+            Console.WriteLine(taskCoordinates);
+
+            await Clients.OthersInGroup(boardId).SendAsync("newTaskPosition", taskCoordinates);
         }
+        
     }
 }

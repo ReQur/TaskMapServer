@@ -19,7 +19,17 @@ namespace dotnetserver.Models
         public string Text;
         public Color Color;
 
-        public string State;
-        public Tuple<uint, uint> Coordinates;
+        public uint State;
+        public (uint x, uint y) Coordinates;
+
+        public BoardTask(uint taskId, uint boardId, uint userId, (uint x, uint y) coordinates)
+        {
+            TaskId = taskId;
+            BoardId = boardId;
+            UserId = userId;
+            Coordinates = coordinates;
+        }
+        public BoardTask()
+        {}
     }
 }
