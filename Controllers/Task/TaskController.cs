@@ -23,9 +23,9 @@ namespace dotnetserver.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<BoardTask> GetTasks(string boardId)
+        public string GetTasks(string boardId)
         {
-            return TaskService.GetBoardTasks(boardId);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(TaskService.GetBoardTasks(boardId));
         }
     }
 

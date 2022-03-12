@@ -35,6 +35,8 @@ namespace dotnetserver
                     {
                         builder.WithOrigins("http://localhost:4201");
                         builder.WithOrigins("http://localhost:4200");
+                        builder.WithOrigins("http://localhost:5501");
+                        builder.WithOrigins("http://localhost:5500");
                         builder.AllowAnyMethod();
                         builder.AllowAnyHeader();
                         builder.AllowCredentials();

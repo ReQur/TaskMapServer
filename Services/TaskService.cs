@@ -16,6 +16,7 @@ namespace dotnetserver
         };
         public static IEnumerable<BoardTask> GetBoardTasks(string boardId)
         {
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(Tasks));
             return Tasks.Where(task => task.BoardId == int.Parse(boardId));
         }
 
