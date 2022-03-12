@@ -38,8 +38,7 @@ namespace dotnetserver.Controllers
         }
         public async Task NewTaskPosition(string boardId, string taskCoordinates)
         {
-            Console.WriteLine(taskCoordinates);
-
+            TaskService.SetNewTaskPosition(taskCoordinates);
             await Clients.OthersInGroup(boardId).SendAsync("newTaskPosition", taskCoordinates);
         }
         

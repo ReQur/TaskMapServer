@@ -9,25 +9,25 @@ namespace dotnetserver.Models
 {
     public class BoardTask
     {
-        public uint TaskId;
-        public uint BoardId;
-        public uint UserId;
+        public uint taskId;
+        public uint boardId;
+        public uint userId;
 
-        public DateTime CreatedDate;
+        public DateTime createdDate;
 
-        public string Label;
-        public string Text;
-        public Color Color;
+        public string label;
+        public string text;
+        public Color color;
 
-        public uint State;
-        public (uint x, uint y) Coordinates;
+        public uint state;
+        public Dictionary<string, int> coordinates;
 
-        public BoardTask(uint taskId, uint boardId, uint userId, (uint x, uint y) coordinates)
+        public BoardTask(uint _taskId, uint _boardId, uint _userId, Dictionary<string, int> _coordinates)
         {
-            TaskId = taskId;
-            BoardId = boardId;
-            UserId = userId;
-            Coordinates = coordinates;
+            taskId = _taskId;
+            boardId = _boardId;
+            userId = _userId;
+            coordinates = _coordinates;
         }
         public BoardTask()
         {}
