@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using dotnetserver.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,9 +24,10 @@ namespace dotnetserver.Controllers
         }
 
         [HttpGet]
-        public string GetTasks(string boardId)
+        public async Task<string> GetTasks(string boardId)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(TaskService.GetBoardTasks(boardId));
+            //return Newtonsoft.Json.JsonConvert.SerializeObject(TaskService.GetBoardTasks(boardId));
+            return await TaskService.GetTasks();
         }
     }
 

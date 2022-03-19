@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using dotnetserver.Models;
 
 
@@ -34,5 +35,11 @@ namespace dotnetserver
             Tasks[index].coordinates["x"] = taskCoordinates[0].coordinates["x"];
             Tasks[index].coordinates["y"] = taskCoordinates[0].coordinates["y"];
         }
+
+        public static async Task<string> GetTasks()
+        {
+            return await  DBService.Query("Select * from task;");
+        }
+
     }
 }

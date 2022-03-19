@@ -21,6 +21,7 @@ namespace dotnetserver
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            DBService.Init();
         }
 
         public IConfiguration Configuration { get; }
