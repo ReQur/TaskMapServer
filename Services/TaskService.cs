@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
+using Dapper;
 using dotnetserver.Models;
+using MySql.Data.MySqlClient;
 
 
 namespace dotnetserver
 {
     public class TaskService
     {
+        private static string connStr = "server=localhost;user=root;port=3306;database=TaskMap;password=rootPassword;";
+
         public static List<BoardTask> Tasks = new List<BoardTask>()
         {
             new BoardTask(0, 0, 0, new Dictionary<string, int>()
@@ -34,5 +40,14 @@ namespace dotnetserver
             Tasks[index].coordinates["x"] = taskCoordinates[0].coordinates["x"];
             Tasks[index].coordinates["y"] = taskCoordinates[0].coordinates["y"];
         }
+
+        public static async Task<IEnumerable<BoardTask>>GetTasks()
+        {
+            using (var db = new MySqlConnection(connStr))
+            {
+                return await db.QueryAsync<BoardTask>("SELECT * FROM task");
+            }
+        }
+
     }
 }
