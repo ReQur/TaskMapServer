@@ -41,11 +41,13 @@ namespace dotnetserver
         //    Tasks[index].coordinates["y"] = taskCoordinates[0].coordinates["y"];
         //}
 
-        public static async Task<IEnumerable<BoardTask>>GetTasks()
+        public static async Task<IEnumerable<BoardTask>>GetBoardTasks(string boardId)
         {
+            var parameters = new { BoardId = boardId };
+            var sql = "SELECT * FROM task WHERE boardId=@BoardId";
             using (var db = new MySqlConnection(connStr))
             {
-                return await db.QueryAsync<BoardTask>("SELECT * FROM task");
+                return await db.QueryAsync<BoardTask>(sql, parameters);
             }
         }
 

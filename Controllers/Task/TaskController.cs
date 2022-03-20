@@ -26,8 +26,7 @@ namespace dotnetserver.Controllers
         [HttpGet]
         public async Task<string> GetTasks(string boardId)
         {
-            //return Newtonsoft.Json.JsonConvert.SerializeObject(TaskService.GetBoardTasks(boardId));
-            var res = await TaskService.GetTasks();
+            var res = await TaskService.GetBoardTasks(boardId);
             return JsonConvert.SerializeObject(res.ToArray());
         }
     }
