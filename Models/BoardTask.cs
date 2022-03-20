@@ -20,13 +20,13 @@ namespace dotnetserver.Models
         public Color color { get; set; }
 
         public uint state { get; set; }
-        public Dictionary<string, int> coordinates { get; set; }
+        public string coordinates { get; set; }
 
     }
 
     public class BoardTask : IBoardTask
     {
-        public BoardTask(uint _taskId, uint _boardId, uint _userId, Dictionary<string, int> _coordinates)
+        public BoardTask(uint _taskId, uint _boardId, uint _userId, string _coordinates)
         {
             taskId = _taskId;
             boardId = _boardId;

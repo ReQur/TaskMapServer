@@ -36,11 +36,11 @@ namespace dotnetserver.Controllers
             ConnectionsGroup.Add(Context.ConnectionId, boardId);
             await Groups.AddToGroupAsync(Context.ConnectionId, boardId);
         }
-        public async Task NewTaskPosition(string boardId, string taskCoordinates)
-        {
-            TaskService.SetNewTaskPosition(taskCoordinates);
-            await Clients.OthersInGroup(boardId).SendAsync("newTaskPosition", taskCoordinates);
-        }
+        //public async Task NewTaskPosition(string boardId, string taskCoordinates)
+        //{
+        //    TaskService.SetNewTaskPosition(taskCoordinates);
+        //    await Clients.OthersInGroup(boardId).SendAsync("newTaskPosition", taskCoordinates);
+        //}
         
     }
 }
