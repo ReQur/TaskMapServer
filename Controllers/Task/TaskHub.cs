@@ -36,11 +36,37 @@ namespace dotnetserver.Controllers
             ConnectionsGroup.Add(Context.ConnectionId, boardId);
             await Groups.AddToGroupAsync(Context.ConnectionId, boardId);
         }
-        //public async Task NewTaskPosition(string boardId, string taskCoordinates)
-        //{
-        //    TaskService.SetNewTaskPosition(taskCoordinates);
-        //    await Clients.OthersInGroup(boardId).SendAsync("newTaskPosition", taskCoordinates);
-        //}
-        
+        public async Task NewTaskPosition(IBoardTask task)
+        {
+            TaskService.SetNewTaskPosition(task);
+            await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("newTaskPosition", task);
+        }
+        public async Task AddNewTask(IBoardTask newTask)
+        {
+            try
+            {
+                await TaskService.AddNewTask(newTask);
+                await Clients.Caller.SendAsync("additionSuccess");
+                await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("newTask", newTask);
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("additionError", ex.Message);
+            }
+        }
+        public async Task DeleteTask(IBoardTask newTask)
+        {
+            try
+            {
+                await TaskService.DeleteTask(newTask);
+                await Clients.Caller.SendAsync("deletionSuccess");
+                await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("deleteTask", newTask);
+            }
+            catch (Exception ex)
+            {
+                await Clients.Caller.SendAsync("deletionError", ex.Message);
+            }
+        }
+
     }
 }

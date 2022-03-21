@@ -33,14 +33,14 @@ namespace dotnetserver
         //    return Tasks.Where(task => task.boardId == int.Parse(boardId));
         //}
 
-        //public static void SetNewTaskPosition(string _taskCoordinates)
-        //{
-        //    dynamic taskCoordinates = Newtonsoft.Json.JsonConvert.DeserializeObject(_taskCoordinates);
-        //    var index = Tasks.FindIndex(f => f.taskId == taskCoordinates[0].taskId);
-        //    Tasks[index].coordinates["x"] = taskCoordinates[0].coordinates["x"];
-        //    Tasks[index].coordinates["y"] = taskCoordinates[0].coordinates["y"];
-        //}
-
+        public static async void SetNewTaskPosition(IBoardTask newTask)
+        {
+            var sql = "UPDATE task SET coordinates=@coordinates WHERE taskId=@taskId";
+            using (var db = new MySqlConnection(connStr))
+            {
+                await db.ExecuteAsync(sql, newTask);
+            }
+        }
         public static async Task<IEnumerable<BoardTask>>GetBoardTasks(string boardId)
         {
             var parameters = new { BoardId = boardId };
@@ -48,6 +48,35 @@ namespace dotnetserver
             using (var db = new MySqlConnection(connStr))
             {
                 return await db.QueryAsync<BoardTask>(sql, parameters);
+            }
+        }
+
+        public static async Task AddNewTask(IBoardTask newTask)
+        {
+            var sql = @"INSERT INTO task(
+                        boardId, userId, 
+                        taskLabel, taskText,
+                        taskColor, state,
+                        coordinates) 
+                        VALUES(
+                        @boardId, @userId, 
+                        @taskLabel, @taskText,
+                        @taskColor, @state,
+                        @coordinates)";
+            using (var db = new MySqlConnection(connStr))
+            {
+                 await db.ExecuteAsync(sql, newTask);
+            }
+        }
+
+        public static async Task DeleteTask(IBoardTask newTask)
+        {
+            var sql = @"DELETE * FROM task 
+                        WHERE
+                        taskId = @taskId)";
+            using (var db = new MySqlConnection(connStr))
+            {
+                await db.ExecuteAsync(sql, newTask);
             }
         }
 
