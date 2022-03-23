@@ -7,19 +7,33 @@ using System.Text;
 
 namespace dotnetserver.Models
 {
-    public class BoardTask
+    public class IBoardTask
     {
-        public uint TaskId;
-        public uint BoardId;
-        public uint UserId;
+        public uint taskId { get; set; }
+        public uint boardId { get; set; }
+        public uint userId { get; set; }
 
-        public DateTime CreatedDate;
+        public DateTime createdDate { get; set; }
 
-        public string Label;
-        public string Text;
-        public Color Color;
+        public string label { get; set; }
+        public string text { get; set; }
+        public Color color { get; set; }
 
-        public string State;
-        public Tuple<uint, uint> Coordinates;
+        public uint state { get; set; }
+        public string coordinates { get; set; }
+
+    }
+
+    public class BoardTask : IBoardTask
+    {
+        public BoardTask(uint _taskId, uint _boardId, uint _userId, string _coordinates)
+        {
+            taskId = _taskId;
+            boardId = _boardId;
+            userId = _userId;
+            coordinates = _coordinates;
+        }
+        public BoardTask()
+        { }
     }
 }

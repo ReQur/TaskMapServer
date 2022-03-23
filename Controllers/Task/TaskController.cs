@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using dotnetserver.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,10 +16,7 @@ namespace dotnetserver.Controllers
     [Route("[controller]")]
     public class TaskController : ControllerBase
     {
-        private static List<BoardTask> Tasks = new List<BoardTask>();
-
         private readonly ILogger<TaskController> _logger;
-        private readonly ITimeService _timeService;
 
         public TaskController(ILogger<TaskController> logger)
         {
@@ -26,9 +24,10 @@ namespace dotnetserver.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Array> Get()
+        public async Task<string> GetTasks(string boardId)
         {
-            return null;
+            var res = await TaskService.GetBoardTasks(boardId);
+            return JsonConvert.SerializeObject(res.ToArray());
         }
     }
 

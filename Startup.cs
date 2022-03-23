@@ -21,6 +21,7 @@ namespace dotnetserver
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -35,6 +36,8 @@ namespace dotnetserver
                     {
                         builder.WithOrigins("http://localhost:4201");
                         builder.WithOrigins("http://localhost:4200");
+                        builder.WithOrigins("http://localhost:5501");
+                        builder.WithOrigins("http://localhost:5500");
                         builder.AllowAnyMethod();
                         builder.AllowAnyHeader();
                         builder.AllowCredentials();
@@ -67,6 +70,7 @@ namespace dotnetserver
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<TaskHub>("/hub/Task");
                 endpoints.MapHub<MainHub>("/hub");
             });
         }
