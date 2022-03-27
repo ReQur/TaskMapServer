@@ -15,7 +15,7 @@ namespace dotnetserver
     {
         private static string connStr = "server=localhost;user=root;port=3306;database=TaskMap;password=rootPassword;";
 
-        //public static List<BoardTask> Tasks = new List<BoardTask>()
+        public static List<BoardTask> Tasks = new List<BoardTask>();
         //{
         //    new BoardTask(0, 0, 0, new Dictionary<string, int>()
         //    {
@@ -41,32 +41,34 @@ namespace dotnetserver
                 await db.ExecuteAsync(sql, newTask);
             }
         }
-        public static async Task<IEnumerable<BoardTask>>GetBoardTasks(string boardId)
+        public static IEnumerable<BoardTask>GetBoardTasks(string boardId)
         {
-            var parameters = new { BoardId = boardId };
-            var sql = "SELECT * FROM task WHERE boardId=@BoardId";
-            using (var db = new MySqlConnection(connStr))
-            {
-                return await db.QueryAsync<BoardTask>(sql, parameters);
-            }
+            //var parameters = new { BoardId = boardId };
+            //var sql = "SELECT * FROM task WHERE boardId=@BoardId";
+            //using (var db = new MySqlConnection(connStr))
+            //{
+            //    return await db.QueryAsync<BoardTask>(sql, parameters);
+            //}
+            return Tasks.ToArray();
         }
 
-        public static async Task AddNewTask(IBoardTask newTask)
+        public static async Task AddNewTask(BoardTask newTask)
         {
-            var sql = @"INSERT INTO task(
-                        boardId, userId, 
-                        taskLabel, taskText,
-                        taskColor, state,
-                        coordinates) 
-                        VALUES(
-                        @boardId, @userId, 
-                        @taskLabel, @taskText,
-                        @taskColor, @state,
-                        @coordinates)";
-            using (var db = new MySqlConnection(connStr))
-            {
-                 await db.ExecuteAsync(sql, newTask);
-            }
+            //var sql = @"INSERT INTO task(
+            //            boardId, userId, 
+            //            taskLabel, taskText,
+            //            taskColor, state,
+            //            coordinates) 
+            //            VALUES(
+            //            @boardId, @userId, 
+            //            @taskLabel, @taskText,
+            //            @taskColor, @state,
+            //            @coordinates)";
+            //using (var db = new MySqlConnection(connStr))
+            //{
+            //     await db.ExecuteAsync(sql, newTask);
+            //}
+            Tasks.Add(newTask);
         }
 
         public static async Task DeleteTask(IBoardTask newTask)

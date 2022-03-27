@@ -26,8 +26,9 @@ namespace dotnetserver.Controllers
             }
             await base.OnDisconnectedAsync(exception);
         }
-        public async Task JoinBoard(string boardId)
+        public async Task JoinBoard(uint _boardId)
         {
+            string boardId = _boardId.ToString();
             if (ConnectionsGroup.ContainsKey(Context.ConnectionId))
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, ConnectionsGroup[Context.ConnectionId]);
@@ -41,13 +42,14 @@ namespace dotnetserver.Controllers
             TaskService.SetNewTaskPosition(task);
             await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("newTaskPosition", task);
         }
-        public async Task AddNewTask(IBoardTask newTask)
+        public async Task AddNewTask(object _newTask)
         {
+            BoardTask newTask = (BoardTask) _newTask;
             try
             {
                 await TaskService.AddNewTask(newTask);
-                await Clients.Caller.SendAsync("additionSuccess");
-                await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("newTask", newTask);
+                //await Clients.Caller.SendAsync("additionSuccess");
+                await Clients.Group(newTask.boardId.ToString()).SendAsync("newTask", newTask);
             }
             catch (Exception ex)
             {
@@ -59,8 +61,8 @@ namespace dotnetserver.Controllers
             try
             {
                 await TaskService.DeleteTask(newTask);
-                await Clients.Caller.SendAsync("deletionSuccess");
-                await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("deleteTask", newTask);
+                //await Clients.Caller.SendAsync("deletionSuccess");
+                await Clients.Group(newTask.boardId.ToString()).SendAsync("deleteTask", newTask);
             }
             catch (Exception ex)
             {

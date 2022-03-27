@@ -26,8 +26,8 @@ namespace dotnetserver.Controllers
         [HttpGet]
         public async Task<string> GetTasks(string boardId)
         {
-            var res = await TaskService.GetBoardTasks(boardId);
-            return JsonConvert.SerializeObject(res.ToArray());
+            var res = TaskService.GetBoardTasks(boardId);
+            return JsonConvert.SerializeObject(res);
         }
     }
 

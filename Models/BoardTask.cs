@@ -7,6 +7,12 @@ using System.Text;
 
 namespace dotnetserver.Models
 {
+    public class Coordinates
+    {
+        public uint x { get; set; }
+        public uint y { get; set; }
+    }
+
     public class IBoardTask
     {
         public uint taskId { get; set; }
@@ -15,12 +21,12 @@ namespace dotnetserver.Models
 
         public DateTime createdDate { get; set; }
 
-        public string label { get; set; }
-        public string text { get; set; }
+        public string taskLabel { get; set; }
+        public string taskText { get; set; }
         public Color color { get; set; }
 
         public uint state { get; set; }
-        public string coordinates { get; set; }
+        public Coordinates coordinates { get; set; }
 
     }
 
@@ -31,7 +37,7 @@ namespace dotnetserver.Models
             taskId = _taskId;
             boardId = _boardId;
             userId = _userId;
-            coordinates = _coordinates;
+            //coordinates = _coordinates;
         }
         public BoardTask()
         { }
