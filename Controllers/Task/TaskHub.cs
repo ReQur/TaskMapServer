@@ -37,14 +37,14 @@ namespace dotnetserver.Controllers
             ConnectionsGroup.Add(Context.ConnectionId, boardId);
             await Groups.AddToGroupAsync(Context.ConnectionId, boardId);
         }
-        public async Task NewTaskPosition(IBoardTask task)
+        public async Task NewTaskPosition(BoardTask task)
         {
             TaskService.SetNewTaskPosition(task);
             await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("newTaskPosition", task);
         }
-        public async Task AddNewTask(object _newTask)
+        public async Task AddNewTask(BoardTask newTask)
         {
-            BoardTask newTask = (BoardTask) _newTask;
+            Console.WriteLine(newTask);
             try
             {
                 await TaskService.AddNewTask(newTask);

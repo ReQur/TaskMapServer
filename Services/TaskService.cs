@@ -33,7 +33,7 @@ namespace dotnetserver
         //    return Tasks.Where(task => task.boardId == int.Parse(boardId));
         //}
 
-        public static async void SetNewTaskPosition(IBoardTask newTask)
+        public static async void SetNewTaskPosition(BoardTask newTask)
         {
             var sql = "UPDATE task SET coordinates=@coordinates WHERE taskId=@taskId";
             using (var db = new MySqlConnection(connStr))

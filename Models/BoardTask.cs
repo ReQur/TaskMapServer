@@ -19,11 +19,11 @@ namespace dotnetserver.Models
         public uint boardId { get; set; }
         public uint userId { get; set; }
 
-        public DateTime createdDate { get; set; }
+        public string createdDate { get; set; }
 
         public string taskLabel { get; set; }
         public string taskText { get; set; }
-        public Color color { get; set; }
+        public string color { get; set; }
 
         public uint state { get; set; }
         public Coordinates coordinates { get; set; }
