@@ -15,25 +15,7 @@ namespace dotnetserver
     {
         private static string connStr = "server=localhost;user=root;port=3306;database=TaskMap;password=rootPassword;";
 
-        public static List<BoardTask> Tasks = new List<BoardTask>();
-        //{
-        //    new BoardTask(0, 0, 0, new Dictionary<string, int>()
-        //    {
-        //        {"x", 0},
-        //        {"y", 0}
-        //    }),
-        //    new BoardTask(1, 0, 0, new Dictionary<string, int>()
-        //    {
-        //        {"x", 100},
-        //        {"y", 100}
-        //    })
-        //};
-        //public static IEnumerable<BoardTask> GetBoardTasks(string boardId)
-        //{
-        //    return Tasks.Where(task => task.boardId == int.Parse(boardId));
-        //}
-
-        public static async void SetNewTaskPosition(BoardTask newTask)
+        public static async Task SetNewTaskPosition(BoardTask newTask)
         {
             var sql = "UPDATE task SET coordinates=@coordinates WHERE taskId=@taskId";
             using (var db = new MySqlConnection(connStr))
@@ -49,26 +31,24 @@ namespace dotnetserver
             {
                 return await db.QueryAsync<BoardTask>(sql, parameters);
             }
-            //return Tasks.ToArray();
         }
 
         public static async Task AddNewTask(BoardTask newTask)
         {
-            //var sql = @"INSERT INTO task(
-            //            boardId, userId, 
-            //            taskLabel, taskText,
-            //            taskColor, state,
-            //            coordinates) 
-            //            VALUES(
-            //            @boardId, @userId, 
-            //            @taskLabel, @taskText,
-            //            @taskColor, @state,
-            //            @coordinates)";
-            //using (var db = new MySqlConnection(connStr))
-            //{
-            //     await db.ExecuteAsync(sql, newTask);
-            //}
-            Tasks.Add(newTask);
+            var sql = @"INSERT INTO task(
+                        boardId, userId, 
+                        taskLabel, taskText,
+                        taskColor, state,
+                        coordinates) 
+                        VALUES(
+                        @boardId, @userId, 
+                        @taskLabel, @taskText,
+                        @taskColor, @state,
+                        @coordinates)";
+            using (var db = new MySqlConnection(connStr))
+            {
+                await db.ExecuteAsync(sql, newTask);
+            }
         }
 
         public static async Task DeleteTask(IBoardTask newTask)
