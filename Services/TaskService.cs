@@ -41,15 +41,15 @@ namespace dotnetserver
                 await db.ExecuteAsync(sql, newTask);
             }
         }
-        public static IEnumerable<BoardTask>GetBoardTasks(string boardId)
+        public static async Task<IEnumerable<BoardTask>>GetBoardTasks(string boardId)
         {
-            //var parameters = new { BoardId = boardId };
-            //var sql = "SELECT * FROM task WHERE boardId=@BoardId";
-            //using (var db = new MySqlConnection(connStr))
-            //{
-            //    return await db.QueryAsync<BoardTask>(sql, parameters);
-            //}
-            return Tasks.ToArray();
+            var parameters = new { BoardId = boardId };
+            var sql = "SELECT * FROM task WHERE boardId=@BoardId";
+            using (var db = new MySqlConnection(connStr))
+            {
+                return await db.QueryAsync<BoardTask>(sql, parameters);
+            }
+            //return Tasks.ToArray();
         }
 
         public static async Task AddNewTask(BoardTask newTask)

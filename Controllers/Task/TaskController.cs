@@ -24,10 +24,10 @@ namespace dotnetserver.Controllers
         }
 
         [HttpGet]
-        public async Task<string> GetTasks(string boardId)
+        public async Task<IActionResult> GetTasks(string boardId)
         {
-            var res = TaskService.GetBoardTasks(boardId);
-            return JsonConvert.SerializeObject(res);
+            var res = await TaskService.GetBoardTasks(boardId);
+            return Ok(res);
         }
     }
 
