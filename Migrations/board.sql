@@ -12,3 +12,6 @@ CREATE TABLE `board` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
   );
+
+
+INSERT INTO board(userId, boardName, boardDescription, state) VALUES(1, 'testBoard', 'That is test board', 'what');
