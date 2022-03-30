@@ -53,6 +53,7 @@ namespace dotnetserver.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 await Clients.Caller.SendAsync("additionError", ex.Message);
             }
         }

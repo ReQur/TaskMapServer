@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 
 namespace dotnetserver.Models
@@ -28,6 +29,11 @@ namespace dotnetserver.Models
         public uint state { get; set; }
         public Coordinates coordinates { get; set; }
 
+        public string stringCoordinates
+        {
+            get { return JsonConvert.SerializeObject(coordinates); }
+        }
+
     }
 
     public class BoardTask : IBoardTask
@@ -42,4 +48,14 @@ namespace dotnetserver.Models
         public BoardTask()
         { }
     }
+
+    public class BoardTaskT : BoardTask
+    {
+        public string stringCoordinates
+        {
+            get { return JsonConvert.SerializeObject(coordinates); }
+        }
+    }
+
+
 }

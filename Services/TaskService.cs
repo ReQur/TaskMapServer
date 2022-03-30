@@ -44,7 +44,7 @@ namespace dotnetserver
                         @boardId, @userId, 
                         @taskLabel, @taskText,
                         @taskColor, @state,
-                        @coordinates)";
+                        @stringCoordinates)";
             using (var db = new MySqlConnection(connStr))
             {
                 await db.ExecuteAsync(sql, newTask);
