@@ -17,7 +17,7 @@ namespace dotnetserver
 
         public static async Task SetNewTaskPosition(BoardTask newTask)
         {
-            var sql = "UPDATE task SET coordinates=@coordinates WHERE taskId=@taskId";
+            var sql = "UPDATE task SET coordinates=@stringCoordinates WHERE taskId=@taskId";
             using (var db = new MySqlConnection(connStr))
             {
                 await db.ExecuteAsync(sql, newTask);
