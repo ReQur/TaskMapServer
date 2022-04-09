@@ -3,23 +3,48 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
 
 
 namespace dotnetserver.Models
 {
-    public class BoardTask
+    public class IBoardTask
     {
-        public uint TaskId;
-        public uint BoardId;
-        public uint UserId;
+        public uint taskId { get; set; }
+        public uint boardId { get; set; }
+        public uint userId { get; set; }
 
-        public DateTime CreatedDate;
+        public string createdDate { get; set; }
 
-        public string Label;
-        public string Text;
-        public Color Color;
+        public string taskLabel { get; set; }
+        public string taskText { get; set; }
+        public string color { get; set; }
+        public string coordinates { get; set; }
 
-        public string State;
-        public Tuple<uint, uint> Coordinates;
+        public uint state { get; set; }
     }
+
+    public class BoardTask : IBoardTask
+    {
+        public BoardTask(uint _taskId, uint _boardId, uint _userId, string _coordinates)
+        {
+            taskId = _taskId;
+            boardId = _boardId;
+            userId = _userId;
+            //coordinates = _coordinates;
+        }
+        public BoardTask()
+        { }
+    }
+
+    //public class BoardTaskT : BoardTask
+    //{
+    //    public string stringCoordinates
+    //    {
+    //        get { return JsonConvert.SerializeObject(coordinates); }
+    //        set { coordinates = JsonConvert.DeserializeObject<coordinates>(value); }
+    //    }
+    //}
+
+
 }

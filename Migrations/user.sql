@@ -6,3 +6,5 @@ CREATE TABLE IF NOT EXISTS `user` (
     `md5PasswordHash` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`userId`)
 );
+
+INSERT INTO user(email, firstName, lastName, md5PasswordHash) VALUES('test@mail.ru', 'testName', 'testLName', '615615vsdvds');
