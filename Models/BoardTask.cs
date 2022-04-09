@@ -8,12 +8,6 @@ using Newtonsoft.Json;
 
 namespace dotnetserver.Models
 {
-    public class Coordinates
-    {
-        public uint x { get; set; }
-        public uint y { get; set; }
-    }
-
     public class IBoardTask
     {
         public uint taskId { get; set; }
@@ -25,15 +19,9 @@ namespace dotnetserver.Models
         public string taskLabel { get; set; }
         public string taskText { get; set; }
         public string color { get; set; }
+        public string coordinates { get; set; }
 
         public uint state { get; set; }
-        public Coordinates coordinates { get; set; }
-
-        public string stringCoordinates
-        {
-            get { return JsonConvert.SerializeObject(coordinates); }
-        }
-
     }
 
     public class BoardTask : IBoardTask
@@ -49,13 +37,14 @@ namespace dotnetserver.Models
         { }
     }
 
-    public class BoardTaskT : BoardTask
-    {
-        public string stringCoordinates
-        {
-            get { return JsonConvert.SerializeObject(coordinates); }
-        }
-    }
+    //public class BoardTaskT : BoardTask
+    //{
+    //    public string stringCoordinates
+    //    {
+    //        get { return JsonConvert.SerializeObject(coordinates); }
+    //        set { coordinates = JsonConvert.DeserializeObject<coordinates>(value); }
+    //    }
+    //}
 
 
 }

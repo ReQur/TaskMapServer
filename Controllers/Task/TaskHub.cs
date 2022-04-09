@@ -39,6 +39,7 @@ namespace dotnetserver.Controllers
         }
         public async Task NewTaskPosition(BoardTask task)
         {
+            Console.WriteLine("messege");
             await TaskService.SetNewTaskPosition(task);
             await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("newTaskPosition", task);
         }
@@ -67,6 +68,7 @@ namespace dotnetserver.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 await Clients.Caller.SendAsync("deletionError", ex.Message);
             }
         }
