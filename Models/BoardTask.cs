@@ -26,25 +26,7 @@ namespace dotnetserver.Models
 
     public class BoardTask : IBoardTask
     {
-        public BoardTask(uint _taskId, uint _boardId, uint _userId, string _coordinates)
-        {
-            taskId = _taskId;
-            boardId = _boardId;
-            userId = _userId;
-            //coordinates = _coordinates;
-        }
-        public BoardTask()
-        { }
+
     }
-
-    //public class BoardTaskT : BoardTask
-    //{
-    //    public string stringCoordinates
-    //    {
-    //        get { return JsonConvert.SerializeObject(coordinates); }
-    //        set { coordinates = JsonConvert.DeserializeObject<coordinates>(value); }
-    //    }
-    //}
-
 
 }
