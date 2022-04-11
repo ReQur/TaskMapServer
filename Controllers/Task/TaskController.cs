@@ -26,6 +26,7 @@ namespace dotnetserver.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTasks(string boardId)
         {
+            _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
             var res = await TaskService.GetBoardTasks(boardId);
             return Ok(res);
         }

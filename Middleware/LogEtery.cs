@@ -20,7 +20,7 @@ namespace dotnetserver.Middleware
 
         public async Task Invoke(HttpContext context, ILogger<LogEtery> logger)
         {
-            logger.LogInformation($"Taken request from {context.Request.Headers["origin"]}");
+            logger.LogTrace($"Taken request from {context.Request.Headers["origin"]}");
             await _nextMiddleware.Invoke(context);
         }
     }
