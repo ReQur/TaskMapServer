@@ -57,7 +57,10 @@ namespace dotnetserver
 
         public static async Task DeleteBoard(string boardId)
         {
-            var sql = @"DELETE FROM board 
+            var sql = @"DELETE FROM task 
+                        WHERE
+                        boardId = @boardId;
+                        DELETE FROM board 
                         WHERE
                         boardId = @boardId";
             using (var db = new MySqlConnection(connStr))
