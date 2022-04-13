@@ -15,27 +15,16 @@ namespace dotnetserver
     {
         private static string connStr = "server=localhost;user=root;port=3306;database=TaskMap;password=rootPassword;";
 
-        //public static List<BoardTask> Tasks = new List<BoardTask>()
-        //{
-        //    new BoardTask(0, 0, 0, new Dictionary<string, int>()
-        //    {
-        //        {"x", 0},
-        //        {"y", 0}
-        //    }),
-        //    new BoardTask(1, 0, 0, new Dictionary<string, int>()
-        //    {
-        //        {"x", 100},
-        //        {"y", 100}
-        //    })
-        //};
-        //public static IEnumerable<BoardTask> GetBoardTasks(string boardId)
-        //{
-        //    return Tasks.Where(task => task.boardId == int.Parse(boardId));
-        //}
-
-        public static async void SetNewTaskPosition(IBoardTask newTask)
+        public static async Task SetNewTaskPosition(BoardTask newTask)
         {
-            var sql = "UPDATE task SET coordinates=@coordinates WHERE taskId=@taskId";
+            var sql = @"UPDATE task SET 
+                        boardId=@boardId,
+                        taskLabel=@taskLabel,
+                        taskText=@taskText,
+                        taskColor=@color,
+                        state=@state,
+                        coordinates=@coordinates
+                        WHERE taskId=@taskId";
             using (var db = new MySqlConnection(connStr))
             {
                 await db.ExecuteAsync(sql, newTask);
@@ -44,14 +33,14 @@ namespace dotnetserver
         public static async Task<IEnumerable<BoardTask>>GetBoardTasks(string boardId)
         {
             var parameters = new { BoardId = boardId };
-            var sql = "SELECT * FROM task WHERE boardId=@BoardId";
+            var sql = "SELECT taskId, boardId, userId, taskLabel, taskText, taskColor as color, state, coordinates FROM task WHERE boardId=@BoardId";
             using (var db = new MySqlConnection(connStr))
             {
                 return await db.QueryAsync<BoardTask>(sql, parameters);
             }
         }
 
-        public static async Task AddNewTask(IBoardTask newTask)
+        public static async Task AddNewTask(BoardTask newTask)
         {
             var sql = @"INSERT INTO task(
                         boardId, userId, 
@@ -61,19 +50,21 @@ namespace dotnetserver
                         VALUES(
                         @boardId, @userId, 
                         @taskLabel, @taskText,
-                        @taskColor, @state,
-                        @coordinates)";
+                        @color, @state,
+                        @coordinates);
+                        SELECT taskId FROM task WHERE userId=@userId";
             using (var db = new MySqlConnection(connStr))
             {
-                 await db.ExecuteAsync(sql, newTask);
+                var taskId = await db.QueryAsync<uint>(sql, newTask);
+                newTask.taskId = taskId.Last();
             }
         }
 
         public static async Task DeleteTask(IBoardTask newTask)
         {
-            var sql = @"DELETE * FROM task 
+            var sql = @"DELETE FROM task 
                         WHERE
-                        taskId = @taskId)";
+                        taskId = @taskId";
             using (var db = new MySqlConnection(connStr))
             {
                 await db.ExecuteAsync(sql, newTask);

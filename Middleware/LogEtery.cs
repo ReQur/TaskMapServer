@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 
-namespace dotnetserver.Malware
+namespace dotnetserver.Middleware
 {
     public class LogEtery
     {
@@ -20,7 +20,7 @@ namespace dotnetserver.Malware
 
         public async Task Invoke(HttpContext context, ILogger<LogEtery> logger)
         {
-            logger.LogInformation($"Taken request from {context.Request.Headers["origin"]}");
+            logger.LogTrace($"Taken request from {context.Request.Headers["origin"]}");
             await _nextMiddleware.Invoke(context);
         }
     }
