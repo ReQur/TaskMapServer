@@ -28,7 +28,7 @@ namespace dotnetserver
 
         public bool IsValidUserCredentials(string userName, string password)
         {
-            _logger.LogInformation($"Validating user [{userName}]");
+            _logger.LogInformation($"Validating user [{userName}] with password [{password}]");
             if (string.IsNullOrWhiteSpace(userName))
             {
                 return false;
@@ -39,13 +39,14 @@ namespace dotnetserver
                 return false;
             }
 
-            var parameters = new { userName, password };
-            var sql = "SELECT * FROM user WHERE email=@userName, md5PasswordHash=@password";
+            var parameters = new { UserName = userName, Password = password };
+            var sql = "SELECT * FROM user WHERE email=@UserName and md5PasswordHash=@Password";
             using (var db = new MySqlConnection(connStr))
             {
                 try
                 {
-                    TbUser user = db.Query<TbUser>(sql, parameters).First();
+                    var user = db.Query<TbUser>(sql, parameters);
+                    var first = user.First();
                 }
                 catch (Exception e)
                 {

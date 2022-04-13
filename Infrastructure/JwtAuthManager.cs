@@ -65,7 +65,6 @@ namespace JwtAuthDemo.Infrastructure
                 expires: now.AddMinutes(_jwtTokenConfig.AccessTokenExpiration),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(_secret), SecurityAlgorithms.HmacSha256Signature));
             var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-
             var refreshToken = new RefreshToken
             {
                 UserName = username,

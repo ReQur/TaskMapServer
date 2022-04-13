@@ -18,7 +18,7 @@ namespace dotnetserver.Models
         public string boardName { get; set; }
         public string boardDescription { get; set; }
 
-        public uint state { get; set; }
+        public string state { get; set; }
     }
 
     public class Board : IBoard
