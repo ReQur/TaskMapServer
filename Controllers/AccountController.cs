@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using dotnetserver;
+using dotnetserver.Models;
 using JwtAuthDemo.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -60,6 +61,40 @@ namespace JwtAuthDemo.Controllers
                 RefreshToken = jwtResult.RefreshToken.TokenString
             });
         }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public ActionResult Register([FromBody] TbUser request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            if (_userService.IsAnExistingUser(request.email))
+            {
+                return Unauthorized();
+            }
+
+            _userService.RegisterUser(request);
+            
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name,request.email),
+                new Claim(ClaimTypes.NameIdentifier, request.userId.ToString())
+            };
+
+            var jwtResult = _jwtAuthManager.GenerateTokens(request.email, claims, DateTime.Now);
+            _logger.LogInformation($"User [{request.email}] logged in the system.");
+            return Ok(new LoginResult
+            {
+                UserName = request.email,
+                UserId = request.userId.ToString(),
+                AccessToken = jwtResult.AccessToken,
+                RefreshToken = jwtResult.RefreshToken.TokenString
+            });
+        }
+
 
         [HttpGet("user")]
         [Authorize]
@@ -135,7 +170,7 @@ namespace JwtAuthDemo.Controllers
         [JsonPropertyName("username")]
         public string UserName { get; set; }
 
-        [JsonPropertyName("role")]
+        [JsonPropertyName("userId")]
         public string UserId { get; set; }
 
         [JsonPropertyName("originalUserName")]
@@ -152,11 +187,5 @@ namespace JwtAuthDemo.Controllers
     {
         [JsonPropertyName("refreshToken")]
         public string RefreshToken { get; set; }
-    }
-
-    public class ImpersonationRequest
-    {
-        [JsonPropertyName("username")]
-        public string UserName { get; set; }
     }
 }

@@ -28,8 +28,7 @@ namespace dotnetserver.Controllers
 
         }
 
-        [HttpGet]
-        [Route("boards")]
+        [HttpGet("get-boards")]
         public async Task<IActionResult> GetBoards()
         {
             var userId = _userService.GetUserId(User.Identity?.Name);
@@ -37,21 +36,24 @@ namespace dotnetserver.Controllers
             var res = await BoardService.GetBoards(userId);
             return Ok(res);
         }
-        [HttpGet]
+
+        [HttpGet("delete-board")]
         public async Task<IActionResult> DeleteBoard(string boardId)
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
             await BoardService.DeleteBoard(boardId);
             return Ok();
         }
-        [HttpPost]
+
+        [HttpPost("add-board")]
         public async Task<IActionResult> AddBoard(Board newBoard)
         {
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
             await BoardService.AddNewBoard(newBoard);
             return Ok(newBoard.boardId);
         }
-        [HttpPost]
+
+        [HttpPost("change-board")]
         public async Task<IActionResult> ChangeBoardInformation(Board newBoard)
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");

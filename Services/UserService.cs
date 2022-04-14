@@ -13,6 +13,8 @@ namespace dotnetserver
         bool IsAnExistingUser(string userName);
         bool IsValidUserCredentials(string userName, string password);
         string GetUserId(string userName);
+        public bool RegisterUser(TbUser user);
+
     }
 
     public class UserService : IUserService
@@ -92,7 +94,26 @@ namespace dotnetserver
                     throw(new Exception("Was try to get userId of unknown user"));
                 }
             }
-            
+        }
+
+        public bool RegisterUser(TbUser user)
+        {
+            var sql = @"INSERT INTO user(email, firstName, lastName, md5PasswordHash) 
+                        VALUES(@email, @firstName, @lastName, @md5PasswordHash);
+                        SELECT userId FROM user WHERE email=@userName";
+            using (var db = new MySqlConnection(connStr))
+            {
+                try
+                {
+                     user.userId = db.Query<uint>(sql, user).First();
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"Unexpected error while register new user {e}");
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
