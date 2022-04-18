@@ -48,8 +48,9 @@ namespace dotnetserver.Controllers
         [HttpPost("add-board")]
         public async Task<IActionResult> AddBoard(Board newBoard)
         {
+            var userId = _userService.GetUserId(User.Identity?.Name);
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
-            await BoardService.AddNewBoard(newBoard);
+            await BoardService.AddNewBoard(newBoard, userId);
             return Ok(newBoard.boardId);
         }
 
