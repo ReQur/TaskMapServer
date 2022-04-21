@@ -37,8 +37,9 @@ namespace dotnetserver
             }
         }
 
-        public static async Task AddNewBoard(Board newBoard)
+        public static async Task AddNewBoard(Board newBoard, string userId)
         {
+            newBoard.userId = uint.Parse(userId);
             var sql = @"INSERT INTO board(
                         userId, boardName,
                         boardDescription,
