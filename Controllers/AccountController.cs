@@ -32,19 +32,19 @@ namespace JwtAuthDemo.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public ActionResult Login([FromBody] LoginRequest request)
+        public async Task<ActionResult> Login([FromBody] LoginRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            if (!_userService.IsValidUserCredentials(request.UserName, request.Password))
+            if (!await _userService.IsValidUserCredentials(request.UserName, request.Password))
             {
                 return Unauthorized();
             }
 
-            var userId = _userService.GetUserId(request.UserName);
+            var userId = await _userService.GetUserId(request.UserName);
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name,request.UserName),
@@ -64,19 +64,19 @@ namespace JwtAuthDemo.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public ActionResult Register([FromBody] TbUser request)
+        public async Task<ActionResult> Register([FromBody] TbUser request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            if (_userService.IsAnExistingUser(request.email))
+            if (!await _userService.IsAnExistingUser(request.email))
             {
                 return Unauthorized();
             }
 
-            _userService.RegisterUser(request);
+            await _userService.RegisterUser(request);
             
             var claims = new[]
             {

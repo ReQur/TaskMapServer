@@ -31,7 +31,7 @@ namespace dotnetserver.Controllers
         [HttpGet("get-boards")]
         public async Task<IActionResult> GetBoards()
         {
-            var userId = _userService.GetUserId(User.Identity?.Name);
+            var userId = await _userService.GetUserId(User.Identity?.Name);
             _logger.LogInformation($"Receive get boards request from user with id {userId}");
             var res = await _boardService.GetBoards(userId);
             return Ok(res);
@@ -48,7 +48,7 @@ namespace dotnetserver.Controllers
         [HttpPost("add-board")]
         public async Task<IActionResult> AddBoard(Board newBoard)
         {
-            var userId = _userService.GetUserId(User.Identity?.Name);
+            var userId = await _userService.GetUserId(User.Identity?.Name);
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
             await _boardService.AddNewBoard(newBoard, userId);
             return Ok(newBoard.boardId);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 using dotnetserver.Models;
 using Microsoft.Extensions.Configuration;
@@ -11,10 +12,10 @@ namespace dotnetserver
 {
     public interface IUserService
     {
-        bool IsAnExistingUser(string userName);
-        bool IsValidUserCredentials(string userName, string password);
-        string GetUserId(string userName);
-        public bool RegisterUser(TbUser user);
+        Task<bool> IsAnExistingUser(string userName);
+        Task<bool> IsValidUserCredentials(string userName, string password);
+        Task<string> GetUserId(string userName);
+        Task<bool> RegisterUser(TbUser user);
 
     }
 
@@ -32,7 +33,7 @@ namespace dotnetserver
             connStr = Configuration.GetConnectionString("mysqlconn");
         }
 
-        public bool IsValidUserCredentials(string userName, string password)
+        public async Task<bool> IsValidUserCredentials(string userName, string password)
         {
             _logger.LogInformation($"Validating user [{userName}] with password [{password}]");
             if (string.IsNullOrWhiteSpace(userName))
@@ -51,7 +52,7 @@ namespace dotnetserver
             {
                 try
                 {
-                    var user = db.Query<TbUser>(sql, parameters);
+                    var user = await db.QueryAsync<TbUser>(sql, parameters);
                     var first = user.First();
                 }
                 catch (Exception e)
@@ -64,7 +65,7 @@ namespace dotnetserver
 
         }
 
-        public bool IsAnExistingUser(string userName)
+        public async Task<bool> IsAnExistingUser(string userName)
         {
             var parameters = new { userName };
             var sql = "SELECT * FROM user WHERE email=@userName";
@@ -72,7 +73,8 @@ namespace dotnetserver
             {
                 try
                 {
-                    TbUser user = db.Query<TbUser>(sql, parameters).First();
+                    var user = await db.QueryAsync<TbUser>(sql, parameters);
+                    user.First();
                 }
                 catch (Exception e)
                 {
@@ -83,7 +85,7 @@ namespace dotnetserver
             return true;
         }
 
-        public string GetUserId(string userName)
+        public async Task<string> GetUserId(string userName)
         {
             var parameters = new { userName };
             var sql = "SELECT userId FROM user WHERE email=@userName";
@@ -91,7 +93,9 @@ namespace dotnetserver
             {
                 try
                 {
-                     return db.Query<string>(sql, parameters).First();
+                     var user = await db.QueryAsync<string>(sql, parameters);
+                     return user.First();
+
                 }
                 catch (Exception e)
                 {
@@ -100,7 +104,7 @@ namespace dotnetserver
             }
         }
 
-        public bool RegisterUser(TbUser user)
+        public async Task<bool> RegisterUser(TbUser user)
         {
             var sql = @"INSERT INTO user(email, firstName, lastName, md5PasswordHash) 
                         VALUES(@email, @firstName, @lastName, @md5PasswordHash);
@@ -109,7 +113,8 @@ namespace dotnetserver
             {
                 try
                 {
-                     user.userId = db.Query<uint>(sql, user).First();
+                    var newUserId = await db.QueryAsync<uint>(sql, user);
+                    user.userId = newUserId.First();
                 }
                 catch (Exception e)
                 {
