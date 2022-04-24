@@ -6,16 +6,34 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Dapper;
 using dotnetserver.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 
 
 namespace dotnetserver
 {
-    public class BoardService
+    public interface IBoardService
     {
-        private static string connStr = "server=localhost;user=root;port=3306;database=TaskMap;password=rootPassword;";
+        Task ChangeBoardInformation(Board newBoard);
+        Task<IEnumerable<Board>> GetBoards(string userId);
+        Task AddNewBoard(Board newBoard, string userId);
+        Task DeleteBoard(string boardId);
 
-        public static async Task ChangeBoardInformation(Board newBoard)
+    }
+    public class BoardService: IBoardService
+    {
+        public static IConfiguration Configuration { get; set; }
+        private static string connStr;
+        private readonly ILogger<BoardService> _logger;
+        public BoardService(ILogger<BoardService> logger, IConfiguration config)
+        {
+            _logger = logger;
+            Configuration = config;
+            connStr = Configuration.GetConnectionString("mysqlconn");
+        }
+
+        public async Task ChangeBoardInformation(Board newBoard)
         {
             var sql = @"UPDATE task SET 
                         boardName=@boardName,
@@ -27,7 +45,7 @@ namespace dotnetserver
                 await db.ExecuteAsync(sql, newBoard);
             }
         }
-        public static async Task<IEnumerable<Board>>GetBoards(string userId)
+        public async Task<IEnumerable<Board>>GetBoards(string userId)
         {
             var parameters = new { UserId = userId };
             var sql = "SELECT * FROM board WHERE userId=@UserId";
@@ -37,7 +55,7 @@ namespace dotnetserver
             }
         }
 
-        public static async Task AddNewBoard(Board newBoard, string userId)
+        public async Task AddNewBoard(Board newBoard, string userId)
         {
             newBoard.userId = uint.Parse(userId);
             var sql = @"INSERT INTO board(
@@ -56,7 +74,7 @@ namespace dotnetserver
             }
         }
 
-        public static async Task DeleteBoard(string boardId)
+        public async Task DeleteBoard(string boardId)
         {
             var sql = @"DELETE FROM task 
                         WHERE

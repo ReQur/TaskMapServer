@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using dotnetserver.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 
@@ -19,13 +20,16 @@ namespace dotnetserver
 
     public class UserService : IUserService
     {
-        private static string connStr = "server=localhost;user=root;port=3306;database=TaskMap;password=rootPassword;";
+        public static IConfiguration Configuration { get; set; }
+        private static string connStr;
 
         private readonly ILogger<UserService> _logger;
 
-        public UserService(ILogger<UserService> logger)
+        public UserService(ILogger<UserService> logger, IConfiguration config)
         {
             _logger = logger;
+            Configuration = config;
+            connStr = Configuration.GetConnectionString("mysqlconn");
         }
 
         public bool IsValidUserCredentials(string userName, string password)

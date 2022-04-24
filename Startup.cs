@@ -59,6 +59,8 @@ namespace dotnetserver
             services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
             services.AddHostedService<JwtRefreshTokenCache>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IBoardService, BoardService>();
 
             services.AddCors(options =>
             {
