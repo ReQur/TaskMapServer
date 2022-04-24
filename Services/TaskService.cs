@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dapper;
 using dotnetserver.Models;
 using MySql.Data.MySqlClient;
+using Microsoft.Extensions.Configuration;
 
 
 namespace dotnetserver
@@ -34,7 +35,7 @@ namespace dotnetserver
         {
             var parameters = new { BoardId = boardId };
             var sql = "SELECT taskId, boardId, userId, taskLabel, taskText, taskColor as color, state, coordinates FROM task WHERE boardId=@BoardId";
-            using (var db = new MySqlConnection(connStr))
+            using (var db = new MySqlConnection(AppConfiguration.GetConnectionString("SQLConnection")))
             {
                 return await db.QueryAsync<BoardTask>(sql, parameters);
             }
