@@ -104,7 +104,6 @@ namespace dotnetserver
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<TaskHub>("/hub/Task");
-                endpoints.MapHub<MainHub>("/hub");
             });
         }
     }
