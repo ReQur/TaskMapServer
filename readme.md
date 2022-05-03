@@ -1,7 +1,8 @@
 # TaskMapServer
-It is a server part of TaskMap project
+is a server part of TaskMap project
 Client part of project you can find there
 https://github.com/soks45/TaskMapClient
+
 ===================
 
 ## To launch the project:
