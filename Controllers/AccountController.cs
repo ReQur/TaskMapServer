@@ -56,7 +56,7 @@ namespace JwtAuthDemo.Controllers
             return Ok(new LoginResult
             {
                 UserName = request.UserName,
-                UserId = userId,
+                UserId = uint.Parse(userId),
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
             });
@@ -89,7 +89,7 @@ namespace JwtAuthDemo.Controllers
             return Ok(new LoginResult
             {
                 UserName = request.email,
-                UserId = request.userId.ToString(),
+                UserId = request.userId,
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
             });
@@ -103,7 +103,7 @@ namespace JwtAuthDemo.Controllers
             return Ok(new LoginResult
             {
                 UserName = User.Identity?.Name,
-                UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty,
+                UserId = uint.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty),
                 OriginalUserName = User.FindFirst("OriginalUserName")?.Value
             });
         }
@@ -141,7 +141,7 @@ namespace JwtAuthDemo.Controllers
                 return Ok(new LoginResult
                 {
                     UserName = userName,
-                    UserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty,
+                    UserId = uint.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty),
                     AccessToken = jwtResult.AccessToken,
                     RefreshToken = jwtResult.RefreshToken.TokenString
                 });
@@ -171,7 +171,7 @@ namespace JwtAuthDemo.Controllers
         public string UserName { get; set; }
 
         [JsonPropertyName("userId")]
-        public string UserId { get; set; }
+        public uint UserId { get; set; }
 
         [JsonPropertyName("originalUserName")]
         public string OriginalUserName { get; set; }

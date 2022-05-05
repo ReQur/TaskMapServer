@@ -57,6 +57,10 @@ namespace dotnetserver
 
         public async Task AddNewBoard(Board newBoard, string userId)
         {
+            _logger.LogDebug($"User[{userId}] has started creation new board with: " +
+                             $"newBoard.boardDescription - {newBoard.boardDescription}, " +
+                             $"newBoard.boardName - {newBoard.boardName}, " +
+                             $"newBoard.state - {newBoard.state}");
             newBoard.userId = uint.Parse(userId);
             var sql = @"INSERT INTO board(
                         userId, boardName,
@@ -76,13 +80,13 @@ namespace dotnetserver
 
         public async Task DeleteBoard(string boardId)
         {
-            var parameters = new { BoardId = boardId};
+            var parameters = new { BoardId = boardId };
             var sql = @"DELETE FROM task 
                         WHERE
-                        boardId = @boardId;
+                        boardId = @BoardId;
                         DELETE FROM board 
                         WHERE
-                        boardId = @boardId";
+                        boardId = @BoardId";
             using (var db = new MySqlConnection(connStr))
             {
                 await db.ExecuteAsync(sql, parameters);

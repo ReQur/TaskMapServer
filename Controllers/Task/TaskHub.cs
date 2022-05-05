@@ -38,6 +38,7 @@ namespace dotnetserver.Controllers
         public async Task JoinBoard(uint _boardId)
         {
             string boardId = _boardId.ToString();
+            Console.WriteLine($"User has connected to {boardId}");
             if (ConnectionsGroup.ContainsKey(Context.ConnectionId))
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, ConnectionsGroup[Context.ConnectionId]);
@@ -46,7 +47,7 @@ namespace dotnetserver.Controllers
             ConnectionsGroup.Add(Context.ConnectionId, boardId);
             await Groups.AddToGroupAsync(Context.ConnectionId, boardId);
         }
-        public async Task NewTaskPosition(BoardTask task)
+        public async Task NewTaskPosition(BoardTask task) 
         {
             Console.WriteLine("messege");
             await _taskService.SetNewTaskPosition(task);
