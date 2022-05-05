@@ -35,10 +35,10 @@ namespace dotnetserver
 
         public async Task ChangeBoardInformation(Board newBoard)
         {
-            var sql = @"UPDATE task SET 
+            var sql = @"UPDATE board SET 
                         boardName=@boardName,
                         boardDescription=@boardDescription,
-                        state=@state,
+                        state=@state
                         WHERE boardId=@boardId";
             using (var db = new MySqlConnection(connStr))
             {
@@ -76,6 +76,7 @@ namespace dotnetserver
 
         public async Task DeleteBoard(string boardId)
         {
+            var parameters = new { BoardId = boardId};
             var sql = @"DELETE FROM task 
                         WHERE
                         boardId = @boardId;
@@ -84,7 +85,7 @@ namespace dotnetserver
                         boardId = @boardId";
             using (var db = new MySqlConnection(connStr))
             {
-                await db.ExecuteAsync(sql, boardId);
+                await db.ExecuteAsync(sql, parameters);
             }
         }
 
