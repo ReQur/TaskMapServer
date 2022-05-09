@@ -127,13 +127,16 @@ namespace dotnetserver
         {
             var sql = @"INSERT INTO user(email, firstName, lastName, md5PasswordHash) 
                         VALUES(@email, @firstName, @lastName, @md5PasswordHash);
-                        SELECT userId FROM user WHERE email=@userName";
+                        SELECT userId FROM user WHERE email=@email";
+            var sqlCreateBoard = @"INSERT INTO board(userId, boardName, boardDescription) 
+                        VALUES(@userId, 'Default', 'Your first board');";
             using (var db = new MySqlConnection(connStr))
             {
                 try
                 {
                     var newUserId = await db.QueryAsync<uint>(sql, user);
                     user.userId = newUserId.First();
+                    await db.ExecuteAsync(sqlCreateBoard, user);
                 }
                 catch (Exception e)
                 {
