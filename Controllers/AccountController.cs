@@ -56,7 +56,7 @@ namespace JwtAuthDemo.Controllers
             return Ok(new LoginResult
             {
                 UserName = request.UserName,
-                UserId = user.userId,
+                userId = user.userId,
                 firstName = user.firstName,
                 lastName = user.lastName,
                 email = user.email,
@@ -92,7 +92,7 @@ namespace JwtAuthDemo.Controllers
             return Ok(new LoginResult
             {
                 UserName = request.email,
-                UserId = request.userId,
+                userId = request.userId,
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
             });
@@ -106,7 +106,7 @@ namespace JwtAuthDemo.Controllers
             return Ok(new LoginResult
             {
                 UserName = User.Identity?.Name,
-                UserId = uint.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty),
+                userId = uint.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty),
                 OriginalUserName = User.FindFirst("OriginalUserName")?.Value
             });
         }
@@ -144,7 +144,7 @@ namespace JwtAuthDemo.Controllers
                 return Ok(new LoginResult
                 {
                     UserName = userName,
-                    UserId = uint.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty),
+                    userId = uint.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty),
                     AccessToken = jwtResult.AccessToken,
                     RefreshToken = jwtResult.RefreshToken.TokenString
                 });
@@ -172,9 +172,6 @@ namespace JwtAuthDemo.Controllers
     {
         [JsonPropertyName("username")]
         public string UserName { get; set; }
-
-        [JsonPropertyName("userId")]
-        public uint UserId { get; set; }
 
         [JsonPropertyName("originalUserName")]
         public string OriginalUserName { get; set; }
