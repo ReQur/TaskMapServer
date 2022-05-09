@@ -15,6 +15,7 @@ namespace dotnetserver
         Task<bool> IsAnExistingUser(string userName);
         Task<bool> IsValidUserCredentials(string userName, string password);
         Task<string> GetUserId(string userName);
+        Task<TbUser> GetUserData(string userName);
         Task<bool> RegisterUser(TbUser user);
 
     }
@@ -23,7 +24,6 @@ namespace dotnetserver
     {
         public static IConfiguration Configuration { get; set; }
         private static string connStr;
-
         private readonly ILogger<UserService> _logger;
 
         public UserService(ILogger<UserService> logger, IConfiguration config)
@@ -100,6 +100,25 @@ namespace dotnetserver
                 catch (Exception e)
                 {
                     throw(new Exception("Was try to get userId of unknown user"));
+                }
+            }
+        }
+
+        public async Task<TbUser> GetUserData(string userName)
+        {
+            var parameters = new { userName };
+            var sql = "SELECT * FROM user WHERE email=@userName";
+            using (var db = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    var user = await db.QueryAsync<TbUser>(sql, parameters);
+                    return user.First();
+
+                }
+                catch (Exception e)
+                {
+                    throw (new Exception("Was try to get data of unknown user"));
                 }
             }
         }
