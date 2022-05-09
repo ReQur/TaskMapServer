@@ -173,9 +173,6 @@ namespace JwtAuthDemo.Controllers
         [JsonPropertyName("username")]
         public string UserName { get; set; }
 
-        [JsonPropertyName("userId")]
-        public uint UserId { get; set; }
-
         [JsonPropertyName("originalUserName")]
         public string OriginalUserName { get; set; }
 
