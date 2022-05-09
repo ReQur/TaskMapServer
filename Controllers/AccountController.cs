@@ -74,7 +74,7 @@ namespace JwtAuthDemo.Controllers
                 return BadRequest();
             }
 
-            if (!await _userService.IsAnExistingUser(request.email))
+            if (await _userService.IsAnExistingUser(request.email))
             {
                 return Unauthorized();
             }
