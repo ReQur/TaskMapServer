@@ -37,8 +37,7 @@ namespace dotnetserver
         {
             var sql = @"UPDATE board SET 
                         boardName=@boardName,
-                        boardDescription=@boardDescription,
-                        state=@state
+                        boardDescription=@boardDescription
                         WHERE boardId=@boardId";
             using (var db = new MySqlConnection(connStr))
             {
@@ -59,17 +58,14 @@ namespace dotnetserver
         {
             _logger.LogDebug($"User[{userId}] has started creation new board with: " +
                              $"newBoard.boardDescription - {newBoard.boardDescription}, " +
-                             $"newBoard.boardName - {newBoard.boardName}, " +
-                             $"newBoard.state - {newBoard.state}");
+                             $"newBoard.boardName - {newBoard.boardName}");
             newBoard.userId = uint.Parse(userId);
             var sql = @"INSERT INTO board(
                         userId, boardName,
-                        boardDescription,
-                        state) 
+                        boardDescription) 
                         VALUES(
                         @userId, @boardName,
-                        @boardDescription,
-                        @state);
+                        @boardDescription);
                         SELECT boardId FROM board WHERE userId=@userId";
             using (var db = new MySqlConnection(connStr))
             {
