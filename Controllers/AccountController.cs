@@ -93,6 +93,9 @@ namespace JwtAuthDemo.Controllers
             {
                 UserName = request.email,
                 userId = request.userId,
+                firstName = request.firstName,
+                lastName = request.lastName,
+                email = request.email,
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
             });
@@ -101,13 +104,18 @@ namespace JwtAuthDemo.Controllers
 
         [HttpGet("user")]
         [Authorize]
-        public ActionResult GetCurrentUser()
+        public async Task<ActionResult> GetCurrentUser()
         {
+            var userName = User.Identity?.Name;
+            var user = await _userService.GetUserData(userName);
+
             return Ok(new LoginResult
             {
-                UserName = User.Identity?.Name,
-                userId = uint.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty),
-                OriginalUserName = User.FindFirst("OriginalUserName")?.Value
+                UserName = userName,
+                userId = user.userId,
+                firstName = user.firstName,
+                lastName = user.lastName,
+                email = user.email
             });
         }
 
@@ -138,13 +146,18 @@ namespace JwtAuthDemo.Controllers
                     return Unauthorized();
                 }
 
+                var user = await _userService.GetUserData(userName);
+
                 var accessToken = await HttpContext.GetTokenAsync("Bearer", "access_token");
                 var jwtResult = _jwtAuthManager.Refresh(request.RefreshToken, accessToken, DateTime.Now);
                 _logger.LogInformation($"User [{userName}] has refreshed JWT token.");
                 return Ok(new LoginResult
                 {
                     UserName = userName,
-                    userId = uint.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty),
+                    userId = user.userId,
+                    firstName = user.firstName,
+                    lastName = user.lastName,
+                    email = user.email,
                     AccessToken = jwtResult.AccessToken,
                     RefreshToken = jwtResult.RefreshToken.TokenString
                 });
@@ -172,9 +185,6 @@ namespace JwtAuthDemo.Controllers
     {
         [JsonPropertyName("username")]
         public string UserName { get; set; }
-
-        [JsonPropertyName("originalUserName")]
-        public string OriginalUserName { get; set; }
 
         [JsonPropertyName("accessToken")]
         public string AccessToken { get; set; }
