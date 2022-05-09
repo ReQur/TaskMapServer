@@ -44,11 +44,11 @@ namespace JwtAuthDemo.Controllers
                 return Unauthorized();
             }
 
-            var userId = await _userService.GetUserId(request.UserName);
+            var user = await _userService.GetUserData(request.UserName);
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,request.UserName),
-                new Claim(ClaimTypes.NameIdentifier, userId)
+                new Claim(ClaimTypes.Name, user.email),
+                new Claim(ClaimTypes.NameIdentifier, user.userId.ToString())
             };
 
             var jwtResult = _jwtAuthManager.GenerateTokens(request.UserName, claims, DateTime.Now);
@@ -56,7 +56,10 @@ namespace JwtAuthDemo.Controllers
             return Ok(new LoginResult
             {
                 UserName = request.UserName,
-                UserId = uint.Parse(userId),
+                UserId = user.userId,
+                firstName = user.firstName,
+                lastName = user.lastName,
+                email = user.email,
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
             });
@@ -165,7 +168,7 @@ namespace JwtAuthDemo.Controllers
         public string Password { get; set; }
     }
 
-    public class LoginResult
+    public class LoginResult: IUser
     {
         [JsonPropertyName("username")]
         public string UserName { get; set; }
