@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using dotnetserver.Controllers;
@@ -16,6 +18,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 
 namespace dotnetserver
@@ -72,6 +75,8 @@ namespace dotnetserver
                         builder.WithOrigins("http://localhost:4200");
                         builder.WithOrigins("http://localhost:5501");
                         builder.WithOrigins("http://localhost:5500");
+                        builder.WithOrigins("http://localhost:5001");
+                        builder.WithOrigins("http://localhost:5000");
                         builder.AllowAnyMethod();
                         builder.AllowAnyHeader();
                         builder.AllowCredentials();
@@ -80,7 +85,27 @@ namespace dotnetserver
             services.AddSignalR();
             services.AddControllers();
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "TaskMap API",
+                    Description = "Here you can find a description" +
+                    " of all possible endpoints (with the exception of SignalR)" +
+                    " of the TaskMap API",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Danil Khabibullin",
+                        Email = string.Empty,
+                        Url = new Uri("https://vk.com/quasar_hy"),
+                    }
+                });
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
         }
 

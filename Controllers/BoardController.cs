@@ -28,6 +28,27 @@ namespace dotnetserver.Controllers
             _boardService = boardService;
         }
 
+        /// <summary>
+        /// Returns all boards of the authorized user.
+        /// </summary>
+        /// <remarks>
+        /// Example of returnable list:
+        /// 
+        ///     [
+        ///         {
+        ///             "boardId": 3,
+        ///             "userId": 2,
+        ///             "createdDate": "05/16/2022 10:18:12",
+        ///             "boardName": "Default",
+        ///             "boardDescription": "Your first board"
+        ///         }
+        ///     ]
+        /// 
+        /// </remarks>
+        /// <returns>List of boards of authorized user</returns>
+        /// <response code="401">If user unauthorized</response>
+        /// <response code="200">Success</response>
+        [ProducesResponseType(typeof(IEnumerable<Board>), 200)]
         [HttpGet("get-boards")]
         public async Task<IActionResult> GetBoards()
         {
