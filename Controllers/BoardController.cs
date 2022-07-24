@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 namespace dotnetserver.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/board")]
     [Authorize]
     public class BoardController : ControllerBase
     {
