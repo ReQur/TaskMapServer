@@ -16,7 +16,7 @@ namespace JwtAuthDemo.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/account")]
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> _logger;
@@ -30,7 +30,20 @@ namespace JwtAuthDemo.Controllers
             _jwtAuthManager = jwtAuthManager;
         }
 
+        /// <summary>
+        /// Authorize user by given credentials
+        /// </summary>
+        /// <remarks>
+        /// That method generates new pair access/refresh tokens,
+        /// Adds user to server claims,
+        /// Returns all user data.
+        /// </remarks>
+        /// <returns>Returns all user data</returns>
+        /// <response code="200">Success</response>
+        /// <response code="400">Bad Request if model state is invalid</response>
+        /// <response code="401">Unauthorized if got incorrect credentials</response>
         [AllowAnonymous]
+        [ProducesResponseType(typeof(LoginResult), 200)]
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginRequest request)
         {
@@ -65,7 +78,21 @@ namespace JwtAuthDemo.Controllers
             });
         }
 
+        /// <summary>
+        /// Register user by given credentials
+        /// </summary>
+        /// <remarks>
+        /// That method add new user data to database,
+        /// Generates new pair access/refresh tokens,
+        /// Adds user to server claims,
+        /// Returns all user data.
+        /// </remarks>
+        /// <returns>Returns all user data</returns>
+        /// <response code="200">Success</response>
+        /// <response code="400">Bad Request if model state is invalid</response>
+        /// <response code="401">Unauthorized if got already registered email</response>
         [AllowAnonymous]
+        [ProducesResponseType(typeof(LoginResult), 200)]
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody] TbUser request)
         {
@@ -101,7 +128,16 @@ namespace JwtAuthDemo.Controllers
             });
         }
 
-
+        /// <summary>
+        /// Get user ID from server claims and returns it
+        /// </summary>
+        /// <remarks>
+        /// Use that method to get current session user ID if its needed
+        /// </remarks>
+        /// <returns>User ID</returns>
+        /// <response code="200">Success</response>
+        /// <response code="401">Unauthorized if get request from unauthorized client</response>
+        [ProducesResponseType(typeof(LoginResult), 200)]
         [HttpGet("user")]
         [Authorize]
         public async Task<ActionResult> GetCurrentUser()
@@ -119,7 +155,13 @@ namespace JwtAuthDemo.Controllers
             });
         }
 
-        [HttpPost("logout")]
+        /// <summary>
+        /// Remove user from server claims and delete his access and refresh tokens.
+        /// </summary>
+        /// <returns>Nothing</returns>
+        /// <response code="200">Success</response>
+        /// <response code="401">Unauthorized if get request from unauthorized client</response>
+        [HttpDelete("logout")]
         [Authorize]
         public ActionResult Logout()
         {
@@ -131,7 +173,18 @@ namespace JwtAuthDemo.Controllers
             _logger.LogInformation($"User [{userName}] logged out the system.");
             return Ok();
         }
-
+        /// <summary>
+        /// reAuthorize user by given refresh token
+        /// </summary>
+        /// <remarks>
+        /// That method generates new pair access/refresh tokens,
+        /// Returns all user data.
+        /// If got invalid token, method returns Unauthorized status code
+        /// </remarks>
+        /// <returns>Returns all user data</returns>
+        /// <response code="200">Success</response>
+        /// <response code="401">Unauthorized if got broken refresh token</response>
+        [ProducesResponseType(typeof(LoginResult), 200)]
         [HttpPost("refresh-token")]
         [Authorize]
         public async Task<ActionResult> RefreshToken([FromBody] RefreshTokenRequest request)

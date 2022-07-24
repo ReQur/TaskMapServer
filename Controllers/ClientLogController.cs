@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 namespace dotnetserver.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/send-log")]
     public class ClientLogController : ControllerBase
     {
         private readonly ILogger<ClientLogController> _logger;
@@ -26,7 +26,15 @@ namespace dotnetserver.Controllers
             _userService = userService;
             _clientLogService = clientLogService;
         }
-
+        /// <summary>
+        /// Takes critical/error logs from client and write it to log file
+        /// </summary>
+        /// <remarks>
+        /// That logs creating automaticly by logger
+        /// </remarks>
+        /// <returns>Noting</returns>
+        /// <response code="200">Success</response>
+        [AllowAnonymous]
         [HttpPost("log")]
         public async Task<IActionResult> SaveLog(ClientLog clientLog)
         {
