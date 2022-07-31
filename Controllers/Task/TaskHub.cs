@@ -47,39 +47,47 @@ namespace dotnetserver.Controllers
             ConnectionsGroup.Add(Context.ConnectionId, boardId);
             await Groups.AddToGroupAsync(Context.ConnectionId, boardId);
         }
-        public async Task NewTaskPosition(BoardTask task) 
+        public async Task<BoardTask> EditTask(BoardTask task) 
         {
-            Console.WriteLine("messege");
-            await _taskService.SetNewTaskPosition(task);
-            await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("newTaskPosition", task);
+            try
+            {
+                await _taskService.SetNewTaskPosition(task);
+                await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("editTask", task);
+                return task;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw new HubException(ex.Message);
+            }
         }
-        public async Task AddNewTask(BoardTask newTask)
+        public async Task<BoardTask> AddNewTask(BoardTask newTask)
         {
             Console.WriteLine(newTask);
             try
             {
                 await _taskService.AddNewTask(newTask);
-                //await Clients.Caller.SendAsync("additionSuccess");
-                await Clients.Group(newTask.boardId.ToString()).SendAsync("newTask", newTask);
+                await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("newTask", newTask);
+                return newTask;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                await Clients.Caller.SendAsync("additionError", ex.Message);
+                throw new HubException(ex.Message);
             }
         }
-        public async Task DeleteTask(IBoardTask newTask)
+        public async Task<bool> DeleteTask(IBoardTask newTask)
         {
             try
             {
                 await _taskService.DeleteTask(newTask);
-                //await Clients.Caller.SendAsync("deletionSuccess");
-                await Clients.Group(newTask.boardId.ToString()).SendAsync("deleteTask", newTask);
+                await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("deleteTask", newTask);
+                return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                await Clients.Caller.SendAsync("deletionError", ex.Message);
+                throw new HubException(ex.Message);
             }
         }
 
