@@ -73,6 +73,7 @@ namespace JwtAuthDemo.Controllers
                 firstName = user.firstName,
                 lastName = user.lastName,
                 email = user.email,
+                lastBoardId = user.lastBoardId,
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
             });
@@ -123,6 +124,7 @@ namespace JwtAuthDemo.Controllers
                 firstName = request.firstName,
                 lastName = request.lastName,
                 email = request.email,
+                lastBoardId = 0,
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
             });
@@ -151,6 +153,7 @@ namespace JwtAuthDemo.Controllers
                 userId = user.userId,
                 firstName = user.firstName,
                 lastName = user.lastName,
+                lastBoardId = user.lastBoardId,
                 email = user.email
             });
         }
@@ -173,6 +176,7 @@ namespace JwtAuthDemo.Controllers
             _logger.LogInformation($"User [{userName}] logged out the system.");
             return Ok();
         }
+
         /// <summary>
         /// reAuthorize user by given refresh token
         /// </summary>
@@ -211,6 +215,7 @@ namespace JwtAuthDemo.Controllers
                     firstName = user.firstName,
                     lastName = user.lastName,
                     email = user.email,
+                    lastBoardId = user.lastBoardId,
                     AccessToken = jwtResult.AccessToken,
                     RefreshToken = jwtResult.RefreshToken.TokenString
                 });
