@@ -21,17 +21,13 @@ namespace dotnetserver
 
     }
 
-    public class UserService : IUserService
+    public class UserService : WithDbAccess, IUserService
     {
-        public static IConfiguration Configuration { get; set; }
-        private static string connStr;
         private readonly ILogger<UserService> _logger;
 
-        public UserService(ILogger<UserService> logger, IConfiguration config)
+        public UserService(ILogger<UserService> logger, IConfiguration config) : base(config)
         {
             _logger = logger;
-            Configuration = config;
-            connStr = Configuration.GetConnectionString("mysqlconn");
         }
 
         public async Task<bool> IsValidUserCredentials(string userName, string password)
@@ -49,18 +45,17 @@ namespace dotnetserver
 
             var parameters = new { UserName = userName, Password = password };
             var sql = "SELECT * FROM user WHERE email=@UserName and md5PasswordHash=@Password";
-            using (var db = new MySqlConnection(connStr))
+
+            try
             {
-                try
-                {
-                    var user = await db.QueryAsync<TbUser>(sql, parameters);
-                    var first = user.First();
-                }
-                catch (Exception e)
-                {
-                    return false;
-                }
+                var user = await DbQueryAsync<TbUser>(sql, parameters);
+                var _ = user.First();
             }
+            catch (Exception e)
+            {
+                return false;
+            }
+            
             
             return true;
 
@@ -70,19 +65,15 @@ namespace dotnetserver
         {
             var parameters = new { userName };
             var sql = "SELECT * FROM user WHERE email=@userName";
-            using (var db = new MySqlConnection(connStr))
+            try
             {
-                try
-                {
-                    var user = await db.QueryAsync<TbUser>(sql, parameters);
-                    user.First();
-                }
-                catch (Exception e)
-                {
-                    return false;
-                }
+                var user = await DbQueryAsync<TbUser>(sql, parameters);
+                var _ = user.First();
             }
-
+            catch (Exception e)
+            {
+                return false;
+            }
             return true;
         }
 
@@ -90,38 +81,34 @@ namespace dotnetserver
         {
             var parameters = new { userName };
             var sql = "SELECT userId FROM user WHERE email=@userName";
-            using (var db = new MySqlConnection(connStr))
+            try
             {
-                try
-                {
-                     var user = await db.QueryAsync<string>(sql, parameters);
-                     return user.First();
+                 var user = await DbQueryAsync<string>(sql, parameters);
+                 return user.First();
 
-                }
-                catch (Exception e)
-                {
-                    throw(new Exception("Was try to get userId of unknown user"));
-                }
             }
+            catch (Exception e)
+            {
+                throw(new Exception("Was try to get userId of unknown user"));
+            }
+            
         }
 
         public async Task<TbUser> GetUserData(string userName)
         {
             var parameters = new { userName };
             var sql = "SELECT * FROM user WHERE email=@userName";
-            using (var db = new MySqlConnection(connStr))
+            try
             {
-                try
-                {
-                    var user = await db.QueryAsync<TbUser>(sql, parameters);
-                    return user.First();
+                var user = await DbQueryAsync<TbUser>(sql, parameters);
+                return user.First();
 
-                }
-                catch (Exception e)
-                {
-                    throw (new Exception("Was try to get data of unknown user"));
-                }
             }
+            catch (Exception e)
+            {
+                throw (new Exception("Was try to get data of unknown user"));
+            }
+            
         }
 
         public async Task<bool> RegisterUser(TbUser user)
@@ -131,20 +118,18 @@ namespace dotnetserver
                         SELECT userId FROM user WHERE email=@email";
             var sqlCreateBoard = @"INSERT INTO board(userId, boardName, boardDescription) 
                         VALUES(@userId, 'Default', 'Your first board');";
-            using (var db = new MySqlConnection(connStr))
+            try
             {
-                try
-                {
-                    var newUserId = await db.QueryAsync<uint>(sql, user);
-                    user.userId = newUserId.First();
-                    await db.ExecuteAsync(sqlCreateBoard, user);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError($"Unexpected error while register new user {e}");
-                    return false;
-                }
+                var newUserId = await DbQueryAsync<uint>(sql, user);
+                user.userId = newUserId.First();
+                await DbExecuteAsync(sqlCreateBoard, user);
             }
+            catch (Exception e)
+            {
+                _logger.LogError($"Unexpected error while register new user {e}");
+                return false;
+            }
+            
             return true;
         }
 
@@ -152,16 +137,13 @@ namespace dotnetserver
         {
             var parameters = new { boardId };
             var sql = "UPDATE user SET lastBoardId=@boardId WHERE userId=(SELECT userId FROM board WHERE boardId=@boardId)";
-            using (var db = new MySqlConnection(connStr))
+            try
             {
-                try
-                {
-                    await db.ExecuteAsync(sql, parameters);
-                }
-                catch (Exception e)
-                {
-                    throw (new Exception($"Was try to set lastboardId={boardId} for user"));
-                }
+                await DbExecuteAsync(sql, parameters);
+            }
+            catch (Exception e)
+            {
+                throw (new Exception($"Was try to set lastboardId={boardId} for user"));
             }
         }
     }

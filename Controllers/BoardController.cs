@@ -15,7 +15,8 @@ namespace dotnetserver.Controllers
 {
     [ApiController]
     [Route("api/board")]
-    [Authorize]
+    //[Authorize]
+    [AllowAnonymous]
     public class BoardController : ControllerBase
     {
         private readonly ILogger<BoardController> _logger;
@@ -101,7 +102,8 @@ namespace dotnetserver.Controllers
         [HttpPost("add-board")]
         public async Task<IActionResult> AddBoard([FromBody, Required] Board newBoard)
         {
-            var userId = await _userService.GetUserId(User.Identity?.Name);
+            //var userId = await _userService.GetUserId(User.Identity?.Name);
+            var userId = "1";
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
             await _boardService.AddNewBoard(newBoard, userId);
             return Ok(newBoard);

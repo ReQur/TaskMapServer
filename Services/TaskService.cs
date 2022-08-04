@@ -21,17 +21,12 @@ namespace dotnetserver
         Task DeleteTask(IBoardTask newTask);
 
     }
-    public class TaskService: ITaskService
+    public class TaskService: WithDbAccess, ITaskService
     {
-        public static IConfiguration Configuration { get; set; }
-        private static string connStr;
-
         private readonly ILogger<TaskService> _logger;
-        public TaskService(ILogger<TaskService> logger, IConfiguration config)
+        public TaskService(ILogger<TaskService> logger, IConfiguration config) : base(config)
         {
             _logger = logger;
-            Configuration = config;
-            connStr = Configuration.GetConnectionString("mysqlconn");
         }
         public async Task SetNewTaskPosition(BoardTask newTask)
         {
@@ -43,19 +38,13 @@ namespace dotnetserver
                         state=@state,
                         coordinates=@coordinates
                         WHERE taskId=@taskId";
-            using (var db = new MySqlConnection(connStr))
-            {
-                await db.ExecuteAsync(sql, newTask);
-            }
+            await DbExecuteAsync(sql, newTask);
         }
         public async Task<IEnumerable<BoardTask>>GetBoardTasks(string boardId)
         {
             var parameters = new { BoardId = boardId };
             var sql = "SELECT taskId, boardId, userId, taskLabel, taskText, taskColor as color, state, coordinates FROM task WHERE boardId=@BoardId";
-            using (var db = new MySqlConnection(connStr))
-            {
-                return await db.QueryAsync<BoardTask>(sql, parameters);
-            }
+            return await DbQueryAsync<BoardTask>(sql, parameters);
         }
 
         public async Task AddNewTask(BoardTask newTask)
@@ -71,11 +60,8 @@ namespace dotnetserver
                         @color, @state,
                         @coordinates);
                         SELECT taskId FROM task WHERE userId=@userId";
-            using (var db = new MySqlConnection(connStr))
-            {
-                var taskId = await db.QueryAsync<uint>(sql, newTask);
-                newTask.taskId = taskId.Last();
-            }
+            var taskId = await DbQueryAsync<uint>(sql, newTask);
+            newTask.taskId = taskId.Last();
         }
 
         public async Task DeleteTask(IBoardTask newTask)
@@ -83,10 +69,7 @@ namespace dotnetserver
             var sql = @"DELETE FROM task 
                         WHERE
                         taskId = @taskId";
-            using (var db = new MySqlConnection(connStr))
-            {
-                await db.ExecuteAsync(sql, newTask);
-            }
+            await DbExecuteAsync(sql, newTask);
         }
 
     }
