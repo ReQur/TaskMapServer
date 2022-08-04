@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using dotnetserver.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
@@ -14,10 +15,12 @@ namespace dotnetserver.Controllers
     {
         private readonly ILogger<TaskHub> _logger;
         private readonly ITaskService _taskService;
+        private readonly IUserService _userService;
 
-        public TaskHub(ILogger<TaskHub> logger, ITaskService taskService)
+        public TaskHub(ILogger<TaskHub> logger, IUserService userService, ITaskService taskService)
         {
             _logger = logger;
+            _userService = userService;
             _taskService = taskService;
         }
 
@@ -35,10 +38,10 @@ namespace dotnetserver.Controllers
             }
             await base.OnDisconnectedAsync(exception);
         }
-        public async Task JoinBoard(uint _boardId)
+        public async Task<IEnumerable<BoardTask>> JoinBoard(uint _boardId)
         {
             string boardId = _boardId.ToString();
-            Console.WriteLine($"User has connected to {boardId}");
+            _logger.LogDebug($"User has connected to {boardId}");
             if (ConnectionsGroup.ContainsKey(Context.ConnectionId))
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, ConnectionsGroup[Context.ConnectionId]);
@@ -46,6 +49,18 @@ namespace dotnetserver.Controllers
             }
             ConnectionsGroup.Add(Context.ConnectionId, boardId);
             await Groups.AddToGroupAsync(Context.ConnectionId, boardId);
+            try
+            {
+                var res = await _taskService.GetBoardTasks(boardId);
+                await _userService.SetLastBoardId(boardId);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                throw new HubException(ex.Message);
+            }
+
         }
         public async Task<BoardTask> EditTask(BoardTask task) 
         {
@@ -57,7 +72,7 @@ namespace dotnetserver.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex.Message);
                 throw new HubException(ex.Message);
             }
         }
@@ -72,7 +87,7 @@ namespace dotnetserver.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex.Message);
                 throw new HubException(ex.Message);
             }
         }
@@ -86,7 +101,7 @@ namespace dotnetserver.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex.Message);
                 throw new HubException(ex.Message);
             }
         }

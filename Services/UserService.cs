@@ -17,6 +17,7 @@ namespace dotnetserver
         Task<string> GetUserId(string userName);
         Task<TbUser> GetUserData(string userName);
         Task<bool> RegisterUser(TbUser user);
+        Task SetLastBoardId(string boardId);
 
     }
 
@@ -145,6 +146,23 @@ namespace dotnetserver
                 }
             }
             return true;
+        }
+
+        public async Task SetLastBoardId(string boardId)
+        {
+            var parameters = new { boardId };
+            var sql = "UPDATE user SET lastBoardId=@boardId WHERE userId=(SELECT userId FROM board WHERE boardId=@boardId)";
+            using (var db = new MySqlConnection(connStr))
+            {
+                try
+                {
+                    await db.ExecuteAsync(sql, parameters);
+                }
+                catch (Exception e)
+                {
+                    throw (new Exception($"Was try to set lastboardId={boardId} for user"));
+                }
+            }
         }
     }
 
