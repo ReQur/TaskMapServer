@@ -15,8 +15,7 @@ namespace dotnetserver.Controllers
 {
     [ApiController]
     [Route("api/board")]
-    //[Authorize]
-    [AllowAnonymous]
+    [Authorize]
     public class BoardController : ControllerBase
     {
         private readonly ILogger<BoardController> _logger;
