@@ -19,7 +19,7 @@ namespace dotnetserver
         public WithDbAccess(IConfiguration config)
         {
             var Configuration = config;
-            _connStr = Configuration.GetConnectionString("mysqlconn");
+            _connStr = Configuration.GetConnectionString("GenericConnection");
         }
 
         protected async Task<IEnumerable<T>> DbQueryAsync<T>(string sql, object parameters)
