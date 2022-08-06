@@ -24,7 +24,7 @@ namespace dotnetserver
     public class TaskService: WithDbAccess, ITaskService
     {
         private readonly ILogger<TaskService> _logger;
-        public TaskService(ILogger<TaskService> logger, IConfiguration config) : base(config)
+        public TaskService(ILogger<TaskService> logger, ConnectionContext context) : base(context)
         {
             _logger = logger;
         }

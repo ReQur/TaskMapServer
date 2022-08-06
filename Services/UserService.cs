@@ -25,7 +25,7 @@ namespace dotnetserver
     {
         private readonly ILogger<UserService> _logger;
 
-        public UserService(ILogger<UserService> logger, IConfiguration config) : base(config)
+        public UserService(ILogger<UserService> logger, ConnectionContext context) : base(context)
         {
             _logger = logger;
         }

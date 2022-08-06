@@ -15,22 +15,22 @@ namespace dotnetserver
 {
     public class WithDbAccess
     {
-        private static string _connStr;
-        public WithDbAccess(IConfiguration config)
+        private readonly ConnectionContext _context;
+
+        public WithDbAccess(ConnectionContext context)
         {
-            var Configuration = config;
-            _connStr = Configuration.GetConnectionString("GenericConnection");
+            _context = context;
         }
 
         protected async Task<IEnumerable<T>> DbQueryAsync<T>(string sql, object parameters)
         {
-            await using var db = new MySqlConnection(_connStr);
+            using var db = _context.GenericConnection();
             return await db.QueryAsync<T>(sql, parameters);
         }
 
         protected async Task DbExecuteAsync(string sql, object parameters)
         {
-            await using var db = new MySqlConnection(_connStr);
+            using var db = _context.GenericConnection();
             await db.QueryAsync(sql, parameters);
         }
     }

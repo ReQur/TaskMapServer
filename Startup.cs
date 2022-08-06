@@ -59,8 +59,9 @@ namespace dotnetserver
                     ClockSkew = TimeSpan.FromMinutes(1)
                 };
             });
-            services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
+            services.AddSingleton<ConnectionContext>();
             services.AddSingleton<WithDbAccess>();
+            services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
             services.AddHostedService<JwtRefreshTokenCache>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITaskService, TaskService>();
