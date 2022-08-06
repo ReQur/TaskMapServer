@@ -61,6 +61,7 @@ namespace dotnetserver
             });
             services.AddSingleton<ConnectionContext>();
             services.AddSingleton<WithDbAccess>();
+            services.AddSingleton<Database>();
             services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
             services.AddHostedService<JwtRefreshTokenCache>();
             services.AddScoped<IUserService, UserService>();
