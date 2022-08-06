@@ -21,13 +21,11 @@ namespace dotnetserver
         {
             _context = context;
         }
-        public void CreateDatabase(string dbName)
+        public void CreateDatabase()
         {
-            var query = "CREATE DATABASE IF NOT EXISTS @name";
-            var parameters = new DynamicParameters();
-            parameters.Add("name", dbName);
+            var query = "CREATE DATABASE IF NOT EXISTS TaskMap;";
             using var connection = _context.MasterConnection();
-            connection.Execute(query, parameters);
+            connection.Execute(query);
         }
     }
 }

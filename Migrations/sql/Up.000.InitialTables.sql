@@ -1,7 +1,3 @@
-CREATE DATABASE TaskMap;
-
-USE TaskMap;
-
 CREATE TABLE IF NOT EXISTS `user` (
     `userId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(255) NOT NULL,
@@ -12,9 +8,6 @@ CREATE TABLE IF NOT EXISTS `user` (
     PRIMARY KEY (`userId`),
     UNIQUE KEY (`email`)
 );
-INSERT INTO user(email, firstName, lastName, md5PasswordHash) VALUES('test@mail.ru', 'testName', 'testLName', '615615vsdvds');
-
-
 CREATE TABLE `board` (
   `boardId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `userId` INT(10) UNSIGNED,
@@ -29,10 +22,6 @@ CREATE TABLE `board` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
   );
-
-INSERT INTO board(userId, boardName, boardDescription, state) VALUES(1, 'testBoard', 'That is test board', 'what');
-
-
 CREATE TABLE `task` (
     `taskId` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     `boardId` INT(10) UNSIGNED,

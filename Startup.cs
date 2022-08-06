@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using dotnetserver.Controllers;
 using dotnetserver.Middleware;
+using FluentMigrator.Runner;
 using JwtAuthDemo.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -62,6 +63,11 @@ namespace dotnetserver
             services.AddSingleton<ConnectionContext>();
             services.AddSingleton<WithDbAccess>();
             services.AddSingleton<Database>();
+            services.AddLogging(c => c.AddFluentMigratorConsole())
+                .AddFluentMigratorCore()
+                .ConfigureRunner(c => c.AddMySql5()
+                    .WithGlobalConnectionString(Configuration.GetConnectionString("GenericConnection"))
+                    .ScanIn(Assembly.GetExecutingAssembly()).For.Migrations());
             services.AddSingleton<IJwtAuthManager, JwtAuthManager>();
             services.AddHostedService<JwtRefreshTokenCache>();
             services.AddScoped<IUserService, UserService>();
