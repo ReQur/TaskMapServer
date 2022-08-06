@@ -25,7 +25,7 @@ namespace dotnetserver
     public class BoardService: WithDbAccess, IBoardService
     {
         private readonly ILogger<BoardService> _logger;
-        public BoardService(ILogger<BoardService> logger, IConfiguration config) : base(config)
+        public BoardService(ILogger<BoardService> logger, ConnectionContext context) : base(context)
         {
             _logger = logger;
         }
