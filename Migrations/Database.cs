@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Dapper;
-using dotnetserver.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using MySql.Data.MySqlClient;
+﻿using Dapper;
 
 
 namespace dotnetserver

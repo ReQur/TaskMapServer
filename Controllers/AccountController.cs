@@ -3,16 +3,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using dotnetserver;
 using dotnetserver.Models;
-using JwtAuthDemo.Infrastructure;
+using dotnetserver.Services.JWT;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace JwtAuthDemo.Controllers
+namespace dotnetserver.Controllers
 {
     [ApiController]
     [Authorize]

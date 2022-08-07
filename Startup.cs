@@ -1,22 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using dotnetserver.Controllers;
 using dotnetserver.Middleware;
+using dotnetserver.Services.JWT;
 using FluentMigrator.Runner;
-using JwtAuthDemo.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -133,7 +128,7 @@ namespace dotnetserver
 
             app.UseCors(MyAllowSpecificOrigins);
 
-            app.UseMiddleware<LogEtery>();
+            app.UseMiddleware<EntryLog>();
 
             app.UseHttpsRedirection();
 
