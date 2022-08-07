@@ -1,0 +1,7 @@
+ALTER TABLE user
+MODIFY COLUMN lastBoardId INT(10) UNSIGNED DEFAULT NULL,
+ADD CONSTRAINT fk_last_user_board
+    FOREIGN KEY (`lastBoardId`)
+    REFERENCES `board` (`boardId`)
+    ON DELETE SET DEFAULT
+    ON UPDATE NO ACTION;
