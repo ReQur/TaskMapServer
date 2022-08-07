@@ -65,12 +65,7 @@ namespace dotnetserver
         public async Task DeleteBoard(string boardId)
         {
             var parameters = new { BoardId = boardId };
-            var sql = @"DELETE FROM task 
-                        WHERE
-                        boardId = @BoardId;
-                        DELETE FROM board 
-                        WHERE
-                        boardId = @BoardId";
+            var sql = @"DELETE FROM board WHERE boardId = @BoardId)";
             await DbExecuteAsync(sql, parameters);
         }
 
