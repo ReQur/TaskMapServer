@@ -15,9 +15,9 @@ namespace dotnetserver
 {
     public interface ITaskService
     {
-        Task SetNewTaskPosition(BoardTask newTask);
+        Task EditTask(BoardTask newTask);
         Task<IEnumerable<BoardTask>> GetBoardTasks(string boardId);
-        Task AddNewTask(BoardTask newTask);
+        Task AddTask(BoardTask newTask);
         Task DeleteTask(IBoardTask newTask);
 
     }
@@ -28,7 +28,7 @@ namespace dotnetserver
         {
             _logger = logger;
         }
-        public async Task SetNewTaskPosition(BoardTask newTask)
+        public async Task EditTask(BoardTask newTask)
         {
             var sql = @"UPDATE task SET 
                         boardId=@boardId,
@@ -47,7 +47,7 @@ namespace dotnetserver
             return await DbQueryAsync<BoardTask>(sql, parameters);
         }
 
-        public async Task AddNewTask(BoardTask newTask)
+        public async Task AddTask(BoardTask newTask)
         {
             var sql = @"INSERT INTO task(
                         boardId, userId, 

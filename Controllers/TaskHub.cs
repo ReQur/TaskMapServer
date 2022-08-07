@@ -66,7 +66,7 @@ namespace dotnetserver.Controllers
         {
             try
             {
-                await _taskService.SetNewTaskPosition(task);
+                await _taskService.EditTask(task);
                 await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("editTask", task);
                 return task;
             }
@@ -76,12 +76,12 @@ namespace dotnetserver.Controllers
                 throw new HubException(ex.Message);
             }
         }
-        public async Task<BoardTask> AddNewTask(BoardTask newTask)
+        public async Task<BoardTask> AddTask(BoardTask newTask)
         {
             Console.WriteLine(newTask);
             try
             {
-                await _taskService.AddNewTask(newTask);
+                await _taskService.AddTask(newTask);
                 await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("newTask", newTask);
                 return newTask;
             }
