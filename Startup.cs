@@ -128,7 +128,7 @@ namespace dotnetserver
 
             app.UseCors(MyAllowSpecificOrigins);
 
-            app.UseMiddleware<LogEtery>();
+            app.UseMiddleware<EntryLog>();
 
             app.UseHttpsRedirection();
 
