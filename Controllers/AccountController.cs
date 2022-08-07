@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using dotnetserver;
 using dotnetserver.Models;
-using JwtAuthDemo.Infrastructure;
+using dotnetserver.Services.JWT;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
