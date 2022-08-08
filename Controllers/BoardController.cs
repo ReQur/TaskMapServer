@@ -59,7 +59,7 @@ namespace dotnetserver.Controllers
         /// Delete one board by given ID of the authorized user.
         /// </summary>
         /// <returns>Nothing</returns>
-        /// <param name="id" type="string" description="The ID of the board that need to be deleted"> </param>
+        /// <param name="boardId" type="string" description="The ID of the board that need to be deleted"> </param>
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [HttpDelete("delete-board/{boardId}")]
@@ -99,7 +99,7 @@ namespace dotnetserver.Controllers
         {
             var userId = await _userService.GetUserId(User.Identity?.Name);
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
-            await _boardService.AddNewBoard(newBoard, userId);
+            newBoard = await _boardService.AddNewBoard(newBoard, userId);
             return Ok(newBoard);
         }
 
@@ -121,16 +121,16 @@ namespace dotnetserver.Controllers
         ///     
         /// 
         /// </remarks>
-        /// <param name="newBoard"></param>
+        /// <param name="board"></param>
         /// <returns>Nothing</returns>
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [HttpPut("change-board/{id}")]
-        public async Task<IActionResult> ChangeBoardInformation(Board newBoard)
+        public async Task<IActionResult> ChangeBoardInformation(Board board)
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
-            await _boardService.ChangeBoardInformation(newBoard);
-            return Ok(newBoard);
+            board = await _boardService.ChangeBoardInformation(board);
+            return Ok(board);
         }
     }
 

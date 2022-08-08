@@ -62,7 +62,7 @@ namespace dotnetserver.Controllers
         {
             try
             {
-                await _taskService.EditTask(task);
+                task = await _taskService.EditTask(task);
                 await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("editTask", task);
                 return task;
             }
@@ -77,7 +77,7 @@ namespace dotnetserver.Controllers
             Console.WriteLine(newTask);
             try
             {
-                await _taskService.AddTask(newTask);
+                newTask = await _taskService.AddTask(newTask);
                 await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("newTask", newTask);
                 return newTask;
             }

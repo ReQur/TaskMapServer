@@ -9,9 +9,9 @@ namespace dotnetserver
 {
     public interface ITaskService
     {
-        Task EditTask(BoardTask newTask);
+        Task<BoardTask> EditTask(BoardTask newTask);
         Task<IEnumerable<BoardTask>> GetBoardTasks(string boardId);
-        Task AddTask(BoardTask newTask);
+        Task<BoardTask> AddTask(BoardTask newTask);
         Task DeleteTask(IBoardTask newTask);
 
     }
@@ -22,7 +22,7 @@ namespace dotnetserver
         {
             _logger = logger;
         }
-        public async Task EditTask(BoardTask newTask)
+        public async Task<BoardTask> EditTask(BoardTask task)
         {
             var sql = @"UPDATE task SET 
                         boardId=@boardId,
@@ -31,8 +31,11 @@ namespace dotnetserver
                         taskColor=@color,
                         state=@state,
                         coordinates=@coordinates
-                        WHERE taskId=@taskId";
-            await DbExecuteAsync(sql, newTask);
+                        WHERE taskId=@taskId;
+                        SELECT * FROM task WHERE userId=@userId";
+
+            var tasks = await DbQueryAsync<BoardTask>(sql, task);
+            return tasks.Last();
         }
         public async Task<IEnumerable<BoardTask>>GetBoardTasks(string boardId)
         {
@@ -41,7 +44,7 @@ namespace dotnetserver
             return await DbQueryAsync<BoardTask>(sql, parameters);
         }
 
-        public async Task AddTask(BoardTask newTask)
+        public async Task<BoardTask> AddTask(BoardTask newTask)
         {
             var sql = @"INSERT INTO task(
                         boardId, userId, 
@@ -53,9 +56,9 @@ namespace dotnetserver
                         @taskLabel, @taskText,
                         @color, @state,
                         @coordinates);
-                        SELECT taskId FROM task WHERE userId=@userId";
-            var taskId = await DbQueryAsync<uint>(sql, newTask);
-            newTask.taskId = taskId.Last();
+                        SELECT * FROM task WHERE userId=@userId";
+            var tasks = await DbQueryAsync<BoardTask>(sql, newTask);
+            return tasks.Last();
         }
 
         public async Task DeleteTask(IBoardTask newTask)
