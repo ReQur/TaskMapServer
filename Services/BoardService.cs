@@ -9,9 +9,9 @@ namespace dotnetserver
 {
     public interface IBoardService
     {
-        Task ChangeBoardInformation(Board newBoard);
+        Task<Board> ChangeBoardInformation(Board newBoard);
         Task<IEnumerable<Board>> GetBoards(string userId);
-        Task AddNewBoard(Board newBoard, string userId);
+        Task<Board> AddNewBoard(Board newBoard, string userId);
         Task DeleteBoard(string boardId);
 
     }
@@ -23,13 +23,15 @@ namespace dotnetserver
             _logger = logger;
         }
 
-        public async Task ChangeBoardInformation(Board newBoard)
+        public async Task<Board> ChangeBoardInformation(Board newBoard)
         {
             var sql = @"UPDATE board SET 
                         boardName=@boardName,
                         boardDescription=@boardDescription
-                        WHERE boardId=@boardId";
-            await DbExecuteAsync(sql, newBoard);
+                        WHERE boardId=@boardId;
+                        SELECT * FROM board WHERE userId=@userId";
+            var boards = await DbQueryAsync<Board>(sql, newBoard);
+            return boards.Last();
         }
         public async Task<IEnumerable<Board>>GetBoards(string userId)
         {
@@ -38,7 +40,7 @@ namespace dotnetserver
             return await DbQueryAsync<Board>(sql, parameters);
         }
 
-        public async Task AddNewBoard(Board newBoard, string userId)
+        public async Task<Board> AddNewBoard(Board newBoard, string userId)
         {
             _logger.LogDebug($"User[{userId}] has started creation new board with: " +
                              $"newBoard.boardDescription - {newBoard.boardDescription}, " +
@@ -50,9 +52,9 @@ namespace dotnetserver
                         VALUES(
                         @userId, @boardName,
                         @boardDescription);
-                        SELECT boardId FROM board WHERE userId=@userId";
-            var boardId = await DbQueryAsync<uint>(sql, newBoard);
-            newBoard.boardId = boardId.Last();
+                        SELECT * FROM board WHERE userId=@userId";
+            var boards = await DbQueryAsync<Board>(sql, newBoard);
+            return boards.Last();
         }
 
         public async Task DeleteBoard(string boardId)
