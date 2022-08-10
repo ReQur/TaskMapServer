@@ -24,15 +24,20 @@ namespace dotnetserver
         }
         public async Task<BoardTask> EditTask(BoardTask task)
         {
-            var sql = @"UPDATE task SET 
-                        boardId=@boardId,
-                        taskLabel=@taskLabel,
-                        taskText=@taskText,
-                        taskColor=@color,
-                        state=@state,
-                        coordinates=@coordinates
+            var sql = @"UPDATE task 
+                        SET 
+                            boardId=@boardId,
+                            taskLabel=@taskLabel,
+                            taskText=@taskText,
+                            taskColor=@color,
+                            state=@state,
+                            coordinates=@coordinates
                         WHERE taskId=@taskId;
-                        SELECT * FROM task WHERE userId=@userId";
+
+                        SELECT * 
+                        FROM task 
+                        WHERE userId=@userId 
+                          AND taskId=@taskId";
 
             var tasks = await DbQueryAsync<BoardTask>(sql, task);
             return tasks.Last();
