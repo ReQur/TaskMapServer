@@ -34,7 +34,7 @@ namespace dotnetserver
                             coordinates=@coordinates
                         WHERE taskId=@taskId;
 
-                        SELECT * 
+                        SELECT *, taskColor as color 
                         FROM task 
                         WHERE userId=@userId 
                           AND taskId=@taskId";
@@ -61,7 +61,7 @@ namespace dotnetserver
                         @taskLabel, @taskText,
                         @color, @state,
                         @coordinates);
-                        SELECT * FROM task WHERE userId=@userId";
+                        SELECT *, taskColor as color FROM task WHERE userId=@userId";
             var tasks = await DbQueryAsync<BoardTask>(sql, newTask);
             return tasks.Last();
         }
