@@ -7,8 +7,8 @@ _____________________
 
 ## To launch the project:
 + Make sure that you have all the dependencies of the project installed. You can use the command "dotnet restore"
-+ Execute the database migrations file. Migrations/migrate.sql
 + Check the correctness of the ConnectionString data in appsetting.json
++ Build the project
 
 ### Project requirements:
 + net5.0
