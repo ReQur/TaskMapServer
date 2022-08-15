@@ -62,9 +62,9 @@ namespace dotnetserver.Controllers
         {
             try
             {
-                task = await _taskService.EditTask(task);
-                await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("editTask", task);
-                return task;
+                var editedTask = await _taskService.EditTask(task);
+                await Clients.OthersInGroup(task.boardId.ToString()).SendAsync("editTask", editedTask);
+                return editedTask;
             }
             catch (Exception ex)
             {
@@ -77,9 +77,9 @@ namespace dotnetserver.Controllers
             Console.WriteLine(newTask);
             try
             {
-                newTask = await _taskService.AddTask(newTask);
-                await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("newTask", newTask);
-                return newTask;
+                var addedTask = await _taskService.AddTask(newTask);
+                await Clients.OthersInGroup(newTask.boardId.ToString()).SendAsync("newTask", addedTask);
+                return addedTask;
             }
             catch (Exception ex)
             {
