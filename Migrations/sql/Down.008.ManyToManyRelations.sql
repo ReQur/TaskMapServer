@@ -1,0 +1,2 @@
+DROP TABLE user_to_board;
+DROP TRIGGER link_board_to_user_on_creation;
