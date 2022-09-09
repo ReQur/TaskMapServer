@@ -8,11 +8,11 @@ namespace dotnetserver
     {
         public override void Down()
         {
-            Execute.Script("./Migrations/sql/Down.007.InsertUserTrigger.sql");
+            Execute.Script("./Migrations/sql/Down.007.InsertUserProc.sql");
         }
         public override void Up()
         {
-            Execute.Script("./Migrations/sql/Up.007.InsertUserTrigger.sql");
+            Execute.Script("./Migrations/sql/Up.007.InsertUserProc.sql");
         }
         
     }
