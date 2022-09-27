@@ -56,6 +56,22 @@ namespace dotnetserver.Controllers
         }
 
         /// <summary>
+        /// Takes board ID and retruns information about it
+        /// </summary>
+        /// <returns>Information about board</returns>
+        /// <param name="boardId" type="string" description="The ID of the board that need to be deleted"> </param>
+        /// <response code="401">If user unauthorized</response>
+        /// <response code="200">Success</response>
+        [ProducesResponseType(typeof(Board), 200)]
+        [HttpGet("{boardId}")]
+        public async Task<IActionResult> GetBoardInfo(string boardId)
+        {
+            _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
+            var res = await _boardService.GetBoardInfo(boardId);
+            return Ok(res);
+        }
+
+        /// <summary>
         /// Delete one board by given ID of the authorized user.
         /// </summary>
         /// <returns>Nothing</returns>

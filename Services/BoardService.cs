@@ -13,6 +13,8 @@ namespace dotnetserver
         Task<IEnumerable<Board>> GetBoards(string userId);
         Task AddNewBoard(Board newBoard, string userId);
         Task DeleteBoard(string boardId);
+        Task<IEnumerable<Board>> GetBoardInfo(string boardId);
+
 
     }
     public class BoardService: WithDbAccess, IBoardService
@@ -37,6 +39,14 @@ namespace dotnetserver
             var parameters = new { UserId = userId };
             var sql = "SELECT * FROM board WHERE userId=@UserId";
             return await DbQueryAsync<Board>(sql, parameters);
+        }
+
+        public async Task<Board> GetBoardInfo(string boardId)
+        {
+            var parameters = new { BoardId = boardId };
+            var sql = "SELECT * FROM board WHERE boardId=@BoardId";
+            var _board = await DbQueryAsync<Board>(sql, parameters);
+            return _board.First();
         }
 
         public async Task AddNewBoard(Board newBoard, string userId)
