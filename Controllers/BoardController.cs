@@ -67,7 +67,7 @@ namespace dotnetserver.Controllers
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
             await _boardService.DeleteBoard(boardId);
-            return Ok(boardId);
+            return Ok();
         }
 
         /// <summary>
@@ -99,8 +99,8 @@ namespace dotnetserver.Controllers
         {
             var userId = await _userService.GetUserId(User.Identity?.Name);
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
-            newBoard = await _boardService.AddNewBoard(newBoard, userId);
-            return Ok(newBoard);
+             await _boardService.AddNewBoard(newBoard, userId);
+            return Ok();
         }
 
         /// <summary>
@@ -129,8 +129,8 @@ namespace dotnetserver.Controllers
         public async Task<IActionResult> ChangeBoardInformation([FromBody, Required] Board board)
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
-            board = await _boardService.ChangeBoardInformation(board);
-            return Ok(board);
+            await _boardService.ChangeBoardInformation(board);
+            return Ok();
         }
     }
 
