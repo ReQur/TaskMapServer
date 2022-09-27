@@ -243,7 +243,7 @@ namespace dotnetserver.Controllers
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [HttpPatch("last-board/{id}")]
-        public async Task<IActionResult> GetLastBoard(string boardId)
+        public async Task<IActionResult> SetLastBoard(string boardId)
         {
             await _userService.SetLastBoardId(boardId);
             return Ok();
