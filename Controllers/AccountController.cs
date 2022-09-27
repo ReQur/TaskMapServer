@@ -221,7 +221,35 @@ namespace dotnetserver.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns Id of last board that was used by user.
+        /// </summary>
+        /// <returns>user.lastBoardId</returns>
+        /// <response code="401">If user unauthorized</response>
+        /// <response code="200">Success</response>
+        [HttpGet("last-board")]
+        public async Task<IActionResult> GetLastBoard()
+        {
+            var userName = User.Identity?.Name;
+            var user = await _userService.GetUserData(userName);
+            return Ok(user.lastBoardId);
+        }
+
+        /// <summary>
+        /// Sets Id of last board
+        /// </summary>
+        /// <returns>nothings</returns>
+        /// <param name="boardId" type="string" description="The ID of the board that need to be deleted"> </param>
+        /// <response code="401">If user unauthorized</response>
+        /// <response code="200">Success</response>
+        [HttpPatch("last-board/{boardId}")]
+        public async Task<IActionResult> SetLastBoard(string boardId)
+        {
+            await _userService.SetLastBoardId(boardId);
+            return Ok();
+        }
     }
+
 
     public class LoginRequest
     {

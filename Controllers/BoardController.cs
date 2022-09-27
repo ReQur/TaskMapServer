@@ -56,6 +56,22 @@ namespace dotnetserver.Controllers
         }
 
         /// <summary>
+        /// Takes board ID and retruns information about it
+        /// </summary>
+        /// <returns>Information about board</returns>
+        /// <param name="boardId" type="string" description="The ID of the board that need to be deleted"> </param>
+        /// <response code="401">If user unauthorized</response>
+        /// <response code="200">Success</response>
+        [ProducesResponseType(typeof(Board), 200)]
+        [HttpGet("{boardId}")]
+        public async Task<IActionResult> GetBoardInfo(string boardId)
+        {
+            _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
+            var res = await _boardService.GetBoardInfo(boardId);
+            return Ok(res);
+        }
+
+        /// <summary>
         /// Delete one board by given ID of the authorized user.
         /// </summary>
         /// <returns>Nothing</returns>
@@ -67,7 +83,7 @@ namespace dotnetserver.Controllers
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
             await _boardService.DeleteBoard(boardId);
-            return Ok(boardId);
+            return Ok();
         }
 
         /// <summary>
@@ -99,8 +115,8 @@ namespace dotnetserver.Controllers
         {
             var userId = await _userService.GetUserId(User.Identity?.Name);
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
-            newBoard = await _boardService.AddNewBoard(newBoard, userId);
-            return Ok(newBoard);
+             await _boardService.AddNewBoard(newBoard, userId);
+            return Ok();
         }
 
         /// <summary>
@@ -129,8 +145,8 @@ namespace dotnetserver.Controllers
         public async Task<IActionResult> ChangeBoardInformation([FromBody, Required] Board board)
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
-            board = await _boardService.ChangeBoardInformation(board);
-            return Ok(board);
+            await _boardService.ChangeBoardInformation(board);
+            return Ok();
         }
     }
 
