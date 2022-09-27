@@ -46,7 +46,7 @@ namespace dotnetserver.Controllers
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(IEnumerable<Board>), 200)]
-        [HttpGet("get-boards")]
+        [HttpGet()]
         public async Task<IActionResult> GetBoards()
         {
             var userId = await _userService.GetUserId(User.Identity?.Name);
@@ -62,7 +62,7 @@ namespace dotnetserver.Controllers
         /// <param name="boardId" type="string" description="The ID of the board that need to be deleted"> </param>
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
-        [HttpDelete("delete-board/{boardId}")]
+        [HttpDelete("{boardId}")]
         public async Task<IActionResult> DeleteBoard(string boardId)
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
@@ -94,7 +94,7 @@ namespace dotnetserver.Controllers
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(int), 200)]
-        [HttpPost("add-board")]
+        [HttpPost]
         public async Task<IActionResult> AddBoard([FromBody, Required] Board newBoard)
         {
             var userId = await _userService.GetUserId(User.Identity?.Name);
@@ -125,8 +125,8 @@ namespace dotnetserver.Controllers
         /// <returns>Nothing</returns>
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
-        [HttpPut("change-board/{id}")]
-        public async Task<IActionResult> ChangeBoardInformation(Board board)
+        [HttpPut]
+        public async Task<IActionResult> ChangeBoardInformation([FromBody, Required] Board board)
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
             board = await _boardService.ChangeBoardInformation(board);

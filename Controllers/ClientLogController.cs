@@ -30,7 +30,7 @@ namespace dotnetserver.Controllers
         /// <returns>Noting</returns>
         /// <response code="200">Success</response>
         [AllowAnonymous]
-        [HttpPost("log")]
+        [HttpPost()]
         public async Task<IActionResult> SaveLog(ClientLog clientLog)
         {
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
