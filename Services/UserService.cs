@@ -40,7 +40,7 @@ namespace dotnetserver
             }
 
             var parameters = new { UserName = userName, Password = password };
-            var sql = "SELECT * FROM user WHERE email=@UserName and md5PasswordHash=@Password";
+            var sql = "SELECT * FROM user WHERE username=@UserName and md5PasswordHash=@Password";
 
             try
             {
@@ -60,7 +60,7 @@ namespace dotnetserver
         public async Task<bool> IsAnExistingUser(string userName)
         {
             var parameters = new { userName };
-            var sql = "SELECT * FROM user WHERE email=@userName";
+            var sql = "SELECT * FROM user WHERE username=@userName";
             try
             {
                 var user = await DbQueryAsync<TbUser>(sql, parameters);
@@ -76,7 +76,7 @@ namespace dotnetserver
         public async Task<string> GetUserId(string userName)
         {
             var parameters = new { userName };
-            var sql = "SELECT userId FROM user WHERE email=@userName";
+            var sql = "SELECT userId FROM user WHERE username=@userName";
             try
             {
                  var user = await DbQueryAsync<string>(sql, parameters);
@@ -93,7 +93,7 @@ namespace dotnetserver
         public async Task<TbUser> GetUserData(string userName)
         {
             var parameters = new { userName };
-            var sql = "SELECT * FROM user WHERE email=@userName";
+            var sql = "SELECT * FROM user WHERE username=@userName";
             try
             {
                 var user = await DbQueryAsync<TbUser>(sql, parameters);
@@ -109,7 +109,7 @@ namespace dotnetserver
 
         public async Task<bool> RegisterUser(TbUser user)
         {
-            var sql = @"CALL RegisterUser_proc(@email, @firstName, @lastName, @md5PasswordHash)";
+            var sql = @"CALL RegisterUser_proc(@username, @firstName, @lastName, @md5PasswordHash)";
             try
             {
                 var newUserId = await DbQueryAsync<uint>(sql, user);
