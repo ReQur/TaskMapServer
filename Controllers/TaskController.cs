@@ -28,38 +28,13 @@ namespace dotnetserver.Controllers
         }
 
         /// <summary>
-        /// Returns all tasks from the board, and marks taht board as last.
-        /// </summary>
-        /// <returns>List of tasks of board</returns>
-        /// <response code="401">If user unauthorized</response>
-        /// <response code="200">Success</response>
-        [ProducesResponseType(typeof(IEnumerable<BoardTask>), 200)]
-        [HttpGet("join-board/{id}")]
-        public async Task<IActionResult> JoinBoard(uint _boardId)
-        {
-            string boardId = _boardId.ToString();
-            _logger.LogDebug($"User has open board {boardId}");
-            try
-            {
-                var res = await _taskService.GetBoardTasks(boardId);
-                await _userService.SetLastBoardId(boardId);
-                return Ok(res);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return Problem(detail: "Exception due joining the board:\n" + ex.Message, statusCode: 500);
-            }
-        }
-
-        /// <summary>
         /// Returns all tasks from the board
         /// </summary>
         /// <returns>List of tasks of board</returns>
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(IEnumerable<BoardTask>), 200)]
-        [HttpGet("{id}")]
+        [HttpGet("{_boardId}")]
         public async Task<IActionResult> GetTasks(uint _boardId)
         {
             string boardId = _boardId.ToString();
