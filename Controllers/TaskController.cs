@@ -34,7 +34,7 @@ namespace dotnetserver.Controllers
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(IEnumerable<BoardTask>), 200)]
-        [HttpGet("join-board")]
+        [HttpGet("join-board/{id}")]
         public async Task<IActionResult> JoinBoard(uint _boardId)
         {
             string boardId = _boardId.ToString();
@@ -53,14 +53,39 @@ namespace dotnetserver.Controllers
         }
 
         /// <summary>
+        /// Returns all tasks from the board
+        /// </summary>
+        /// <returns>List of tasks of board</returns>
+        /// <response code="401">If user unauthorized</response>
+        /// <response code="200">Success</response>
+        [ProducesResponseType(typeof(IEnumerable<BoardTask>), 200)]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTasks(uint _boardId)
+        {
+            string boardId = _boardId.ToString();
+            _logger.LogDebug($"User has open board {boardId}");
+            try
+            {
+                var res = await _taskService.GetBoardTasks(boardId);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return Problem(detail: "Exception due joining the board:\n" + ex.Message, statusCode: 500);
+            }
+        }
+
+
+        /// <summary>
         /// Takes new verion of the task and replace all inforamtion of this task by taskId.
         /// </summary>
         /// <returns>Edited task</returns>
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(BoardTask), 200)]
-        [HttpPut("edit-task")]
-        public async Task<IActionResult> EditTask(BoardTask task)
+        [HttpPut()]
+        public async Task<IActionResult> EditTask([FromBody, Required] BoardTask task)
         {
             try
             {
@@ -81,8 +106,8 @@ namespace dotnetserver.Controllers
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(BoardTask), 200)]
-        [HttpPost("add-task")]
-        public async Task<IActionResult> AddTask(BoardTask newTask)
+        [HttpPost()]
+        public async Task<IActionResult> AddTask([FromBody, Required] BoardTask newTask)
         {
             Console.WriteLine(newTask);
             try
@@ -104,12 +129,12 @@ namespace dotnetserver.Controllers
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(Boolean), 200)]
-        [HttpDelete("delete-task")]
-        public async Task<IActionResult> DeleteTask(IBoardTask newTask)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(uint taskId)
         {
             try
             {
-                await _taskService.DeleteTask(newTask);
+                await _taskService.DeleteTask(taskId.ToString());
                 return Ok(true);
             }
             catch (Exception ex)
