@@ -29,7 +29,7 @@ namespace dotnetserver
                         boardName=@boardName,
                         boardDescription=@boardDescription
                         WHERE boardId=@boardId;
-                        SELECT * FROM board WHERE userId=@userId";
+                        SELECT * FROM board WHERE boardId=@boardId";
             var boards = await DbQueryAsync<Board>(sql, newBoard);
             return boards.Last();
         }
