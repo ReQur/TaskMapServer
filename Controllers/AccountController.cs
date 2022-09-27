@@ -59,7 +59,7 @@ namespace dotnetserver.Controllers
             var user = await _userService.GetUserData(request.UserName);
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, user.email),
+                new Claim(ClaimTypes.Name, user.username),
                 new Claim(ClaimTypes.NameIdentifier, user.userId.ToString())
             };
 
@@ -67,11 +67,10 @@ namespace dotnetserver.Controllers
             _logger.LogInformation($"User [{request.UserName}] logged in the system.");
             return Ok(new LoginResult
             {
-                UserName = request.UserName,
+                username = request.UserName,
                 userId = user.userId,
                 firstName = user.firstName,
                 lastName = user.lastName,
-                email = user.email,
                 lastBoardId = user.lastBoardId,
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
@@ -101,7 +100,7 @@ namespace dotnetserver.Controllers
                 return BadRequest();
             }
 
-            if (await _userService.IsAnExistingUser(request.email))
+            if (await _userService.IsAnExistingUser(request.username))
             {
                 return Unauthorized();
             }
@@ -110,19 +109,18 @@ namespace dotnetserver.Controllers
             
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,request.email),
+                new Claim(ClaimTypes.Name,request.username),
                 new Claim(ClaimTypes.NameIdentifier, request.userId.ToString())
             };
 
-            var jwtResult = _jwtAuthManager.GenerateTokens(request.email, claims, DateTime.Now);
-            _logger.LogInformation($"User [{request.email}] logged in the system.");
+            var jwtResult = _jwtAuthManager.GenerateTokens(request.username, claims, DateTime.Now);
+            _logger.LogInformation($"User [{request.username}] logged in the system.");
             return Ok(new LoginResult
             {
-                UserName = request.email,
+                username = request.username,
                 userId = request.userId,
                 firstName = request.firstName,
                 lastName = request.lastName,
-                email = request.email,
                 lastBoardId = 0,
                 AccessToken = jwtResult.AccessToken,
                 RefreshToken = jwtResult.RefreshToken.TokenString
@@ -148,12 +146,11 @@ namespace dotnetserver.Controllers
 
             return Ok(new LoginResult
             {
-                UserName = userName,
+                username = user.username,
                 userId = user.userId,
                 firstName = user.firstName,
                 lastName = user.lastName,
-                lastBoardId = user.lastBoardId,
-                email = user.email
+                lastBoardId = user.lastBoardId
             });
         }
 
@@ -209,11 +206,10 @@ namespace dotnetserver.Controllers
                 _logger.LogInformation($"User [{userName}] has refreshed JWT token.");
                 return Ok(new LoginResult
                 {
-                    UserName = userName,
                     userId = user.userId,
                     firstName = user.firstName,
                     lastName = user.lastName,
-                    email = user.email,
+                    username = user.username,
                     lastBoardId = user.lastBoardId,
                     AccessToken = jwtResult.AccessToken,
                     RefreshToken = jwtResult.RefreshToken.TokenString
@@ -240,8 +236,6 @@ namespace dotnetserver.Controllers
 
     public class LoginResult: IUser
     {
-        [JsonPropertyName("username")]
-        public string UserName { get; set; }
 
         [JsonPropertyName("accessToken")]
         public string AccessToken { get; set; }
