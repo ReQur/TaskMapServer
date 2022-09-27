@@ -13,7 +13,7 @@ namespace dotnetserver
         Task<IEnumerable<Board>> GetBoards(string userId);
         Task AddNewBoard(Board newBoard, string userId);
         Task DeleteBoard(string boardId);
-        Task<IEnumerable<Board>> GetBoardInfo(string boardId);
+        Task<Board> GetBoardInfo(string boardId);
 
 
     }
