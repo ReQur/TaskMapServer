@@ -242,7 +242,7 @@ namespace dotnetserver.Controllers
         /// <param name="boardId" type="string" description="The ID of the board that need to be deleted"> </param>
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
-        [HttpPatch("last-board/{id}")]
+        [HttpPatch("last-board/{boardId}")]
         public async Task<IActionResult> SetLastBoard(string boardId)
         {
             await _userService.SetLastBoardId(boardId);
