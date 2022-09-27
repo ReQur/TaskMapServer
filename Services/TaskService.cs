@@ -12,7 +12,7 @@ namespace dotnetserver
         Task<BoardTask> EditTask(BoardTask newTask);
         Task<IEnumerable<BoardTask>> GetBoardTasks(string boardId);
         Task<BoardTask> AddTask(BoardTask newTask);
-        Task DeleteTask(IBoardTask newTask);
+        Task DeleteTask(string _taskId);
 
     }
     public class TaskService: WithDbAccess, ITaskService
@@ -66,12 +66,13 @@ namespace dotnetserver
             return tasks.Last();
         }
 
-        public async Task DeleteTask(IBoardTask newTask)
+        public async Task DeleteTask(string _taskId)
         {
+            var parameters = new { taskId = _taskId };
             var sql = @"DELETE FROM task 
                         WHERE
                         taskId = @taskId";
-            await DbExecuteAsync(sql, newTask);
+            await DbExecuteAsync(sql, parameters);
         }
 
     }
