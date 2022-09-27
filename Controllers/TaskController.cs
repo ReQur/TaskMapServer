@@ -104,7 +104,7 @@ namespace dotnetserver.Controllers
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(Boolean), 200)]
-        [HttpDelete("{id}")]
+        [HttpDelete("{taskId}")]
         public async Task<IActionResult> DeleteTask(uint taskId)
         {
             try
