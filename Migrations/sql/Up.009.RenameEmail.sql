@@ -27,11 +27,11 @@ BEGIN
     INTO _userId;
 
     INSERT INTO board(
-        username, 
+        userId, 
         boardName, 
         boardDescription) 
     VALUES(
-        _username, 
+        _userId, 
         'Default', 
         'Your first board');
 
