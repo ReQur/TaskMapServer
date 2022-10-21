@@ -10,7 +10,7 @@ namespace dotnetserver
     public interface ITaskService
     {
         Task<BoardTask> EditTask(BoardTask newTask);
-        Task<IEnumerable<BoardTask>> GetBoardTasks(string boardId);
+        Task<BoardTask[]> GetBoardTasks(string boardId);
         Task<BoardTask> AddTask(BoardTask newTask);
         Task DeleteTask(IBoardTask newTask);
 
@@ -42,11 +42,12 @@ namespace dotnetserver
             var tasks = await DbQueryAsync<BoardTask>(sql, task);
             return tasks.Last();
         }
-        public async Task<IEnumerable<BoardTask>>GetBoardTasks(string boardId)
+        public async Task<BoardTask[]>GetBoardTasks(string boardId)
         {
             var parameters = new { BoardId = boardId };
             var sql = "SELECT taskId, boardId, userId, taskLabel, taskText, taskColor as color, state, x, y FROM task WHERE boardId=@BoardId";
-            return await DbQueryAsync<BoardTask>(sql, parameters);
+            TaskList taskList = new TaskList(await DbQueryAsync<BoardTask>(sql, parameters));
+            return taskList.GetTasks();
         }
 
         public async Task<BoardTask> AddTask(BoardTask newTask)
