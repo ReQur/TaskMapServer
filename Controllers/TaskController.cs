@@ -35,6 +35,7 @@ namespace dotnetserver.Controllers
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(IEnumerable<BoardTask>), 200)]
         [HttpGet("{_boardId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetTasks(uint _boardId)
         {
             string boardId = _boardId.ToString();

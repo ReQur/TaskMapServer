@@ -45,7 +45,7 @@ namespace dotnetserver
         public async Task<BoardTask[]>GetBoardTasks(string boardId)
         {
             var parameters = new { BoardId = boardId };
-            var sql = "SELECT taskId, boardId, userId, taskLabel, taskText, taskColor as color, state, x, y FROM task WHERE boardId=@BoardId";
+            var sql = "SELECT taskId, boardId, next_task_id, userId, createdDate, taskLabel, taskText, taskColor as color, state, x, y FROM task WHERE boardId=@BoardId";
             TaskList taskList = new TaskList(await DbQueryAsync<BoardTask>(sql, parameters));
             return taskList.GetTasks();
         }
@@ -54,7 +54,7 @@ namespace dotnetserver
         {
             var sql = @"INSERT INTO
                             task(boardId, userId, taskLabel, taskText, taskColor, state, x, y)
-                            VALUES (@boardId, @userId, @taskLabel', @taskText, @color, @state, @x, @y);
+                            VALUES (@boardId, @userId, @taskLabel, @taskText, @color, @state, @x, @y);
                         UPDATE task
                             SET next_task_id = LAST_INSERT_ID()
                             WHERE boardId = @boardId AND next_task_id IS NULL AND taskId <> LAST_INSERT_ID();";
@@ -64,10 +64,11 @@ namespace dotnetserver
 
         public async Task DeleteTask(string _taskId)
         {
+            var parameters = new { taskId = _taskId };
             var sql = @"SELECT next_task_id INTO @_next_task_id FROM task WHERE taskId=@taskId;
                         UPDATE task SET next_task_id = @_next_task_id WHERE next_task_id=@taskId;
                         DELETE FROM task WHERE taskId = @taskId;";
-            await DbExecuteAsync(sql, newTask);
+            await DbExecuteAsync(sql, parameters);
         }
 
     }
