@@ -35,7 +35,6 @@ namespace dotnetserver.Controllers
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(IEnumerable<BoardTask>), 200)]
         [HttpGet("{_boardId}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetTasks(uint _boardId)
         {
             string boardId = _boardId.ToString();
@@ -106,11 +105,35 @@ namespace dotnetserver.Controllers
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(Boolean), 200)]
         [HttpDelete("{taskId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteTask(uint taskId)
         {
             try
             {
                 await _taskService.DeleteTask(taskId.ToString());
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return Problem(detail: "Exception due deleting task:\n" + ex.Message, statusCode: 500);
+            }
+        }
+
+        /// <summary>
+        /// Takes task and move it to new position in list
+        /// </summary>
+        /// <returns>200/500 on success/error</returns>
+        /// <response code="401">If user unauthorized</response>
+        /// <response code="200">Success</response>
+        [ProducesResponseType(typeof(Boolean), 200)]
+        [HttpPut("list/{taskToMove}&{posBefore}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UpdateTaskPriority(uint taskToMove, uint posBefore)
+        {
+            try
+            {
+                await _taskService.UpdatePriority(taskToMove, posBefore);
                 return Ok(true);
             }
             catch (Exception ex)

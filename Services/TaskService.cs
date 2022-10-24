@@ -13,6 +13,7 @@ namespace dotnetserver
         Task<BoardTask[]> GetBoardTasks(string boardId);
         Task<BoardTask> AddTask(BoardTask newTask);
         Task DeleteTask(string _taskId);
+        Task UpdatePriority(uint taskToMove, uint posBefore);
 
     }
     public class TaskService: WithDbAccess, ITaskService
@@ -70,6 +71,25 @@ namespace dotnetserver
                         DELETE FROM task WHERE taskId = @taskId;";
             await DbExecuteAsync(sql, parameters);
         }
+
+        public async Task UpdatePriority(uint _taskToMove, uint _posBefore)
+        {
+            var parameters = new { taskToMove = _taskToMove, posBefore= _posBefore};
+            var sql = @"";
+            if (_posBefore == 0)
+                sql = @"SELECT next_task_id INTO @_next_task_id FROM task WHERE taskId=@taskToMove;
+                UPDATE task SET next_task_id = @_next_task_id WHERE next_task_id=@taskToMove;
+                UPDATE task SET next_task_id = @taskToMove WHERE next_task_id IS NULL;
+                UPDATE task SET next_task_id = NULL WHERE taskId=@taskToMove;";
+            else
+                sql = @"SELECT next_task_id INTO @_next_task_id FROM task WHERE taskId=@taskToMove;
+                UPDATE task SET next_task_id = @_next_task_id WHERE next_task_id=@taskToMove;
+                UPDATE task SET next_task_id = @taskToMove WHERE next_task_id=@posBefore;
+                UPDATE task SET next_task_id = @posBefore WHERE taskId=@taskToMove;";
+            await DbExecuteAsync(sql, parameters);
+
+        }
+
 
     }
 }
