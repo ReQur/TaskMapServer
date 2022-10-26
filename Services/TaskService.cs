@@ -40,7 +40,7 @@ namespace dotnetserver
                         WHERE userId=@userId 
                           AND taskId=@taskId";
 
-            var tasks = await DbQueryAsync<BoardTask>(sql, task);
+            var tasks = await DbQueryAsync<BoardTask>(sql, task, transaction: true);
             return tasks.Last();
         }
         public async Task<BoardTask[]>GetBoardTasks(string boardId)
@@ -59,7 +59,7 @@ namespace dotnetserver
                         UPDATE task
                             SET next_task_id = LAST_INSERT_ID()
                             WHERE boardId = @boardId AND next_task_id IS NULL AND taskId <> LAST_INSERT_ID();";
-            await DbExecuteAsync(sql, newTask);
+            await DbExecuteAsync(sql, newTask, transaction: true);
         }
 
         public async Task DeleteTask(string _taskId)
@@ -68,7 +68,7 @@ namespace dotnetserver
             var sql = @"SELECT next_task_id INTO @_next_task_id FROM task WHERE taskId=@taskId;
                         UPDATE task SET next_task_id = @_next_task_id WHERE next_task_id=@taskId;
                         DELETE FROM task WHERE taskId = @taskId;";
-            await DbExecuteAsync(sql, parameters);
+            await DbExecuteAsync(sql, parameters, transaction: true);
         }
 
         public async Task UpdatePriority(uint _taskToMove, uint _posBefore)
@@ -85,7 +85,7 @@ namespace dotnetserver
                 UPDATE task SET next_task_id = @_next_task_id WHERE next_task_id=@taskToMove;
                 UPDATE task SET next_task_id = @taskToMove WHERE next_task_id=@posBefore;
                 UPDATE task SET next_task_id = @posBefore WHERE taskId=@taskToMove;";
-            await DbExecuteAsync(sql, parameters);
+            await DbExecuteAsync(sql, parameters, transaction: true);
 
         }
 
