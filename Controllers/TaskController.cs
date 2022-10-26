@@ -87,8 +87,8 @@ namespace dotnetserver.Controllers
             Console.WriteLine(newTask);
             try
             {
-                var addedTask = await _taskService.AddTask(newTask);
-                return Ok(addedTask);
+                await _taskService.AddTask(newTask);
+                return Ok();
             }
             catch (Exception ex)
             {

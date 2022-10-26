@@ -11,7 +11,7 @@ namespace dotnetserver
     {
         Task<BoardTask> EditTask(BoardTask newTask);
         Task<BoardTask[]> GetBoardTasks(string boardId);
-        Task<BoardTask> AddTask(BoardTask newTask);
+        Task AddTask(BoardTask newTask);
         Task DeleteTask(string _taskId);
         Task UpdatePriority(uint taskToMove, uint posBefore);
 
@@ -51,7 +51,7 @@ namespace dotnetserver
             return taskList.GetTasks();
         }
 
-        public async Task<BoardTask> AddTask(BoardTask newTask)
+        public async Task AddTask(BoardTask newTask)
         {
             var sql = @"INSERT INTO
                             task(boardId, userId, taskLabel, taskText, taskColor, state, x, y)
@@ -59,8 +59,7 @@ namespace dotnetserver
                         UPDATE task
                             SET next_task_id = LAST_INSERT_ID()
                             WHERE boardId = @boardId AND next_task_id IS NULL AND taskId <> LAST_INSERT_ID();";
-            var tasks = await DbQueryAsync<BoardTask>(sql, newTask);
-            return tasks.Last();
+            await DbExecuteAsync(sql, newTask);
         }
 
         public async Task DeleteTask(string _taskId)
