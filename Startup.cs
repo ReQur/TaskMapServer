@@ -81,6 +81,7 @@ namespace dotnetserver
                         builder.WithOrigins("http://localhost:5500");
                         builder.WithOrigins("http://localhost:5001");
                         builder.WithOrigins("http://localhost:5000");
+                        builder.WithOrigins("http://taskmap.com:4200");
                         builder.AllowAnyMethod();
                         builder.AllowAnyHeader();
                         builder.AllowCredentials();
@@ -141,7 +142,6 @@ namespace dotnetserver
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<TaskHub>("/hub/task");
             });
         }
     }

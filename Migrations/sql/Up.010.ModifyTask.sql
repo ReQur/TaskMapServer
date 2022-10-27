@@ -1,0 +1,10 @@
+ALTER TABLE task
+	DROP COLUMN `coordinates`,
+	ADD COLUMN `x` DOUBLE UNSIGNED,
+	ADD COLUMN `y` DOUBLE UNSIGNED,
+	ADD COLUMN `next_task_id` INT(10) UNSIGNED NULL, 
+	ADD CONSTRAINT fk_next_task_id_exists
+		FOREIGN KEY (`next_task_id`)
+		REFERENCES `task` (`taskId`)
+		ON DELETE SET NULL
+		ON UPDATE NO ACTION;

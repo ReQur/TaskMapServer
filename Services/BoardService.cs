@@ -32,7 +32,7 @@ namespace dotnetserver
                         boardDescription=@boardDescription
                         WHERE boardId=@boardId;
                         SELECT * FROM board WHERE boardId=@boardId";
-            await DbExecuteAsync(sql, newBoard);
+            await DbExecuteAsync(sql, newBoard, transaction: true);
         }
         public async Task<IEnumerable<Board>>GetBoards(string userId)
         {
