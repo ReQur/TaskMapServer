@@ -109,11 +109,17 @@ namespace dotnetserver
 
         public async Task<bool> RegisterUser(TbUser user)
         {
-            var sql = @"CALL RegisterUser_proc(@username, @firstName, @lastName, @md5PasswordHash)";
+            var sql = @"INSERT INTO user(username, firstName, lastName, md5PasswordHash) 
+                            VALUES(@username,  @firstName, @lastName, @md5PasswordHash);
+                        SELECT LAST_INSERT_ID() INTO @_userId;
+                        INSERT INTO board(userId, boardName,  boardDescription) 
+                            VALUES(@_userId, 'Default', 'Your first board');
+                        UPDATE user
+                            SET lastBoardId = (SELECT LAST_INSERT_ID())
+                            WHERE userId = @_userId;";
             try
             {
-                var newUserId = await DbQueryAsync<uint>(sql, user);
-                user.userId = newUserId.First();
+                await DbExecuteAsync(sql, user);
             }
             catch (Exception e)
             {
