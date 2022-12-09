@@ -11,8 +11,8 @@ namespace dotnetserver
         Task<bool> IsAnExistingUser(string userName);
         Task<bool> IsValidUserCredentials(string userName, string password);
         Task<string> GetUserId(string userName);
-        Task<TbUser> GetUserData(string userName);
-        Task<bool> RegisterUser(TbUser user);
+        Task<UserData> GetUserData(string userName);
+        Task<uint> RegisterUser(SignUpUser user);
         Task SetLastBoardId(string boardId);
 
     }
@@ -44,7 +44,7 @@ namespace dotnetserver
 
             try
             {
-                var user = await DbQueryAsync<TbUser>(sql, parameters);
+                var user = await DbQueryAsync<UserData>(sql, parameters);
                 var _ = user.First();
             }
             catch (Exception e)
@@ -63,7 +63,7 @@ namespace dotnetserver
             var sql = "SELECT * FROM user WHERE username=@userName";
             try
             {
-                var user = await DbQueryAsync<TbUser>(sql, parameters);
+                var user = await DbQueryAsync<UserData>(sql, parameters);
                 var _ = user.First();
             }
             catch (Exception e)
@@ -90,13 +90,13 @@ namespace dotnetserver
             
         }
 
-        public async Task<TbUser> GetUserData(string userName)
+        public async Task<UserData> GetUserData(string userName)
         {
             var parameters = new { userName };
             var sql = "SELECT * FROM user WHERE username=@userName";
             try
             {
-                var user = await DbQueryAsync<TbUser>(sql, parameters);
+                var user = await DbQueryAsync<UserData>(sql, parameters);
                 return user.First();
 
             }
@@ -107,27 +107,27 @@ namespace dotnetserver
             
         }
 
-        public async Task<bool> RegisterUser(TbUser user)
+        public async Task<uint> RegisterUser(SignUpUser user)
         {
-            var sql = @"INSERT INTO user(username, firstName, lastName, md5PasswordHash) 
-                            VALUES(@username,  @firstName, @lastName, @md5PasswordHash);
+            var sql = @"INSERT INTO user(username, firstName, lastName, password, avatar) 
+                            VALUES(@username, @avatar, @firstName, @lastName, @password);
                         SELECT LAST_INSERT_ID() INTO @_userId;
                         INSERT INTO board(userId, boardName,  boardDescription) 
                             VALUES(@_userId, 'Default', 'Your first board');
                         UPDATE user
                             SET lastBoardId = (SELECT LAST_INSERT_ID())
-                            WHERE userId = @_userId;";
+                            WHERE userId = @_userId;
+                        SELECT @_userId";
             try
             {
-                await DbExecuteAsync(sql, user);
+                var userId = await DbQueryAsync<uint>(sql, user);
+                return userId.FirstOrDefault();
             }
             catch (Exception e)
             {
                 _logger.LogError($"Unexpected error while register new user {e}");
-                return false;
+                return 0;
             }
-            
-            return true;
         }
 
         public async Task SetLastBoardId(string boardId)
