@@ -40,7 +40,7 @@ namespace dotnetserver
             }
 
             var parameters = new { UserName = userName, Password = password };
-            var sql = "SELECT * FROM user WHERE username=@UserName and md5PasswordHash=@Password";
+            var sql = "SELECT * FROM user WHERE username=@UserName and password=@Password";
 
             try
             {
