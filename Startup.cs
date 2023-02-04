@@ -69,6 +69,7 @@ namespace dotnetserver
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IBoardService, BoardService>();
             services.AddScoped<IClientLogService, ClientLogService>();
+            services.AddScoped<IAWSService, AWSService>();
 
             services.AddCors(options =>
             {

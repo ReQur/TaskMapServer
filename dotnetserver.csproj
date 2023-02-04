@@ -19,6 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.Core" Version="3.7.104.2" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.103.2" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.11" />

@@ -54,6 +54,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IBoardService, BoardService>();
 builder.Services.AddScoped<IClientLogService, ClientLogService>();
+builder.Services.AddScoped<IAWSService, AWSService>();
 
 
 builder.Services.AddCors(options =>

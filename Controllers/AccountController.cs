@@ -21,12 +21,16 @@ namespace dotnetserver.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IUserService _userService;
         private readonly IJwtAuthManager _jwtAuthManager;
+        private readonly IAWSService _awsService;
+        private readonly string _baseAvatarUrl;
 
-        public AccountController(ILogger<AccountController> logger, IUserService userService, IJwtAuthManager jwtAuthManager)
+        public AccountController(ILogger<AccountController> logger, IUserService userService, IJwtAuthManager jwtAuthManager, IAWSService awsService)
         {
             _logger = logger;
             _userService = userService;
             _jwtAuthManager = jwtAuthManager;
+            _awsService = awsService;
+            _baseAvatarUrl = "https://storage.yandexcloud.net/tm-bucket/";
         }
 
         /// <summary>
@@ -242,6 +246,15 @@ namespace dotnetserver.Controllers
         public async Task<IActionResult> SetLastBoard(string boardId)
         {
             await _userService.SetLastBoardId(boardId);
+            return Ok();
+        }
+
+        [HttpPost("upload-avatar/")]
+        public async Task<IActionResult> UploadAvatart(IFormFile avatart)
+        {
+            var userName = User.Identity?.Name;
+            await _awsService.Upload(avatart, userName);
+            await _userService.SetAvatart(userName, _baseAvatarUrl + userName + "-avatar");
             return Ok();
         }
     }

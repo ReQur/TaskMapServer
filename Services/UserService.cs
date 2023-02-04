@@ -14,6 +14,7 @@ namespace dotnetserver
         Task<UserData> GetUserData(string userName);
         Task<uint> RegisterUser(SignUpUser user);
         Task SetLastBoardId(string boardId);
+        Task SetAvatart(string userName, string avatar);
 
     }
 
@@ -141,6 +142,20 @@ namespace dotnetserver
             catch (Exception e)
             {
                 throw (new Exception($"Was try to set lastboardId={boardId} for user"));
+            }
+        }
+
+        public async Task SetAvatart(string userName, string avatar)
+        {
+            var parameters = new { _userName = userName, _avatar = avatar};
+            var sql = "UPDATE user SET avatar=@_avatar WHERE username=@_userName";
+            try
+            {
+                await DbExecuteAsync(sql, parameters);
+            }
+            catch (Exception e)
+            {
+                throw (new Exception($"Was try to set avatar for user"));
             }
         }
     }
