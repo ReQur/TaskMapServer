@@ -1,0 +1,225 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>dotnetserver</name>
+    </assembly>
+    <members>
+        <member name="M:dotnetserver.Controllers.AccountController.Login(dotnetserver.Models.LoginRequest)">
+            <summary>
+            Authorize user by given credentials
+            </summary>
+            <remarks>
+            That method generates new pair access/refresh tokens,
+            Adds user to server claims,
+            Returns all user data.
+            </remarks>
+            <returns>Returns all user data</returns>
+            <response code="200">Success</response>
+            <response code="400">Bad Request if model state is invalid</response>
+            <response code="401">Unauthorized if got incorrect credentials</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.AccountController.Register(dotnetserver.Models.SignUpUser)">
+            <summary>
+            Register user by given credentials
+            </summary>
+            <remarks>
+            That method add new user data to database,
+            Generates new pair access/refresh tokens,
+            Adds user to server claims,
+            Returns all user data.
+            </remarks>
+            <returns>Returns all user data</returns>
+            <response code="200">Success</response>
+            <response code="400">Bad Request if model state is invalid</response>
+            <response code="401">Unauthorized if got already registered email</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.AccountController.GetCurrentUser">
+            <summary>
+            Get user ID from server claims and returns it
+            </summary>
+            <remarks>
+            Use that method to get current session user ID if its needed
+            </remarks>
+            <returns>User ID</returns>
+            <response code="200">Success</response>
+            <response code="401">Unauthorized if get request from unauthorized client</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.AccountController.Logout">
+            <summary>
+            Remove user from server claims and delete his access and refresh tokens.
+            </summary>
+            <returns>Nothing</returns>
+            <response code="200">Success</response>
+            <response code="401">Unauthorized if get request from unauthorized client</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.AccountController.RefreshToken(dotnetserver.Models.RefreshTokenRequest)">
+            <summary>
+            reAuthorize user by given refresh token
+            </summary>
+            <remarks>
+            That method generates new pair access/refresh tokens,
+            Returns all user data.
+            If got invalid token, method returns Unauthorized status code
+            </remarks>
+            <returns>Returns all user data</returns>
+            <response code="200">Success</response>
+            <response code="401">Unauthorized if got broken refresh token</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.AccountController.GetLastBoard">
+            <summary>
+            Returns Id of last board that was used by user.
+            </summary>
+            <returns>user.lastBoardId</returns>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.AccountController.SetLastBoard(System.String)">
+            <summary>
+            Sets Id of last board
+            </summary>
+            <returns>nothings</returns>
+            <param name="boardId" type="string" description="The ID of the board that need to be deleted"> </param>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.BoardController.GetBoards">
+            <summary>
+            Returns all boards of the authorized user.
+            </summary>
+            <remarks>
+            Example of returnable list:
+            
+                [
+                    {
+                        "boardId": 3,
+                        "userId": 2,
+                        "createdDate": "05/16/2022 10:18:12",
+                        "boardName": "Default",
+                        "boardDescription": "Your first board"
+                    }
+                ]
+            
+            </remarks>
+            <returns>List of boards of authorized user</returns>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.BoardController.GetBoardInfo(System.String)">
+            <summary>
+            Takes board ID and retruns information about it
+            </summary>
+            <returns>Information about board</returns>
+            <param name="boardId" type="string" description="The ID of the board that need to be deleted"> </param>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.BoardController.DeleteBoard(System.String)">
+            <summary>
+            Delete one board by given ID of the authorized user.
+            </summary>
+            <returns>Nothing</returns>
+            <param name="boardId" type="string" description="The ID of the board that need to be deleted"> </param>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.BoardController.AddBoard(dotnetserver.Models.Board)">
+            <summary>
+            Takes new board, creates it and returns new board ID
+            </summary>
+            <remarks>
+            Accepted value example:
+            Note that the boardId is zero and createdDate is empty.
+            These values will be given by server
+            
+                
+                    {
+                        "boardId": 0,
+                        "userId": 2,
+                        "createdDate": "",
+                        "boardName": "mynewboard",
+                        "boardDescription": "I have just create it!"
+                    }
+                
+            
+            </remarks>
+            <param name="newBoard"></param>
+            <returns>ID of created board</returns>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.BoardController.ChangeBoardInformation(dotnetserver.Models.Board)">
+            <summary>
+            Takes new board's data, change it in database.
+            </summary>
+            <remarks>
+            Accepted value example:
+            Note that only boardName and boardDescription can be changed
+            
+                
+                    {
+                        "boardId": 0,
+                        "userId": 2,
+                        "createdDate": "",
+                        "boardName": "mynewboardname",
+                        "boardDescription": "I have just change the name of my board"
+                    }
+                
+            
+            </remarks>
+            <param name="board"></param>
+            <returns>Nothing</returns>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.ClientLogController.SaveLog(dotnetserver.Models.ClientLog)">
+            <summary>
+            Takes critical/error logs from client and write it to log file
+            </summary>
+            <remarks>
+            That logs creating automaticly by logger
+            </remarks>
+            <returns>Noting</returns>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.TaskController.GetTasks(System.UInt32)">
+            <summary>
+            Returns all tasks from the board
+            </summary>
+            <returns>List of tasks of board</returns>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.TaskController.EditTask(dotnetserver.Models.BoardTask)">
+            <summary>
+            Takes new verion of the task and replace all inforamtion of this task by taskId.
+            </summary>
+            <returns>Edited task</returns>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.TaskController.AddTask(dotnetserver.Models.BoardTask)">
+            <summary>
+            Takes new task without taskId/creationDate and returns task with completed fields
+            </summary>
+            <returns>Added task with set Id</returns>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.TaskController.DeleteTask(System.UInt32)">
+            <summary>
+            Takes task and deletes it
+            </summary>
+            <returns>200/500 on success/error</returns>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:dotnetserver.Controllers.TaskController.UpdateTaskPriority(System.UInt32,System.UInt32)">
+            <summary>
+            Takes task and move it to new position in list
+            </summary>
+            <returns>200/500 on success/error</returns>
+            <response code="401">If user unauthorized</response>
+            <response code="200">Success</response>
+        </member>
+    </members>
+</doc>
