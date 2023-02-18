@@ -87,6 +87,8 @@ namespace dotnetserver.Controllers
             Console.WriteLine(newTask);
             try
             {
+                var userId = await _userService.GetUserId(User.Identity?.Name);
+                newTask.userId = UInt32.Parse(userId);
                 await _taskService.AddTask(newTask);
                 return Ok();
             }
