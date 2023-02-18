@@ -20,6 +20,7 @@ namespace dotnetserver
         private readonly ILogger<UserService> _logger;
         private AmazonS3Config configsS3;
         private AmazonS3Client s3client;
+        private readonly string tmpDir = "./.tmp";
 
         public AWSService(ILogger<UserService> logger)
         {
@@ -30,11 +31,15 @@ namespace dotnetserver
                 AuthenticationRegion = "ru-central1"
             };
             s3client = new AmazonS3Client(configsS3);
+            if (!Directory.Exists(tmpDir))
+            {
+                Directory.CreateDirectory(tmpDir);
+            }
         }
 
         public async Task Upload(IFormFile file, string username)
         {
-            string path = "./tmp/" + file.FileName;
+            string path = tmpDir + file.FileName;
             // сохраняем файл в папку Files в каталоге wwwroot
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
