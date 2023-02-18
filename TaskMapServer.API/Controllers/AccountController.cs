@@ -165,7 +165,7 @@ namespace dotnetserver.Controllers
         /// <returns>Nothing</returns>
         /// <response code="200">Success</response>
         /// <response code="401">Unauthorized if get request from unauthorized client</response>
-        [HttpDelete("logout")]
+        [HttpPost("logout")]
         [Authorize]
         public ActionResult Logout()
         {
