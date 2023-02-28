@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using dotnetserver.Models;
 using dotnetserver.Services.JWT;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,8 @@ namespace dotnetserver.Controllers
         private readonly IJwtAuthManager _jwtAuthManager;
         private readonly IAWSService _awsService;
         private readonly string _baseAvatarUrl;
+        private readonly GoogleJsonWebSignature.ValidationSettings _settings;
+
 
         public AccountController(ILogger<AccountController> logger, IUserService userService, IJwtAuthManager jwtAuthManager, IAWSService awsService)
         {
@@ -31,6 +34,8 @@ namespace dotnetserver.Controllers
             _jwtAuthManager = jwtAuthManager;
             _awsService = awsService;
             _baseAvatarUrl = "https://storage.yandexcloud.net/tm-bucket/";
+            _settings = new GoogleJsonWebSignature.ValidationSettings();
+
         }
 
         /// <summary>
@@ -69,6 +74,69 @@ namespace dotnetserver.Controllers
 
             var jwtResult = _jwtAuthManager.GenerateTokens(request.username, claims, DateTime.Now);
             _logger.LogInformation($"User [{request.username}] logged in the system.");
+            return Ok(new LoginResult
+            {
+                username = user.username,
+                userId = user.userId,
+                firstName = user.firstName,
+                lastName = user.lastName,
+                lastBoardId = user.lastBoardId,
+                AccessToken = jwtResult.AccessToken,
+                RefreshToken = jwtResult.RefreshToken.TokenString
+            });
+        }
+
+        /// <summary>
+        /// Authorize user by given credentials
+        /// </summary>
+        /// <remarks>
+        /// That method generates new pair access/refresh tokens,
+        /// Adds user to server claims,
+        /// Returns JWT token
+        /// </remarks>
+        /// <returns>Returns all user data</returns>
+        /// <response code="200">Success</response>
+        /// <response code="400">Bad Request if model state is invalid</response>
+        /// <response code="401">Unauthorized if got incorrect credentials</response>
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(LoginResult), 200)]
+        [HttpPost(nameof(OAuthLogin))]
+        public async Task<ActionResult> OAuthLogin([FromBody] OAuthRequest request)
+        {
+            GoogleJsonWebSignature.Payload payload;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                payload = GoogleJsonWebSignature.ValidateAsync(request.IdToken, _settings).Result;
+            }
+            catch
+            {
+                return Unauthorized();
+            }
+            if (!await _userService.IsAnExistingUser(payload.Email))
+            {
+                await _userService.RegisterUser(new SignUpUser
+                {
+                    username = payload.Email,
+                    firstName = payload.Name,
+                    lastName = payload.FamilyName,
+                    avatar = null,
+                    password = RandomAlphaNumericString.Generate(10)
+                });
+            }
+
+            var user = await _userService.GetUserData(payload.Email);
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, user.username),
+                new Claim(ClaimTypes.NameIdentifier, user.userId.ToString())
+            };
+
+            var jwtResult = _jwtAuthManager.GenerateTokens(payload.Email, claims, DateTime.Now);
+            _logger.LogInformation($"User [{payload.Email}] logged in the system.");
             return Ok(new LoginResult
             {
                 username = user.username,

@@ -39,6 +39,13 @@ namespace dotnetserver.Models
         public string password { get; set; }
     }
 
+    public class OAuthRequest
+    {
+        [JsonPropertyName("idToken")]
+        [Required]
+        public string IdToken { get; set; }
+    }
+
     public class RefreshTokenRequest
     {
         [JsonPropertyName("refreshToken")]
