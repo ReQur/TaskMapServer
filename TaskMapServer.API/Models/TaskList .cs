@@ -28,7 +28,6 @@ namespace dotnetserver.Models
                 t = _tasks.Single(x => x.next_task_id == t.taskId);
                 tasks[i] = t;
             }
-            Array.Reverse(tasks);
         }
 
         public BoardTask[] GetTasks() => tasks;

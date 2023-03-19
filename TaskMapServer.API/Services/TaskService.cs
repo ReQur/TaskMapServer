@@ -83,13 +83,12 @@ namespace dotnetserver
                 UPDATE task SET next_task_id = NULL WHERE taskId=@taskToMove;";
             else
                 sql = @"SELECT next_task_id INTO @_next_task_id FROM task WHERE taskId=@taskToMove;
+                UPDATE task SET boardId = @boardId WHERE taskId=@taskToMove;
                 UPDATE task SET next_task_id = @_next_task_id WHERE next_task_id=@taskToMove;
                 UPDATE task SET next_task_id = @taskToMove WHERE next_task_id=@posBefore;
                 UPDATE task SET next_task_id = @posBefore WHERE taskId=@taskToMove;";
             await DbExecuteAsync(sql, parameters, transaction: true);
 
         }
-
-
     }
 }
