@@ -427,3 +427,58 @@
     at Observable.init [as _subscribe] (http://localhost:4200/vendor.js:7310:41)
     at Observable._trySubscribe (http://localhost:4200/vendor.js:5853:19)
     at http://localhost:4200/vendor.js:5846:113 user uses agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36 OPR/88.0.4412.53 (Edition Yx)
+2023-03-06T17:52:38.118Z LogLevel 5 Message: Error: OK
+    at http://localhost:4200/main.js:331:19
+    at http://localhost:4200/vendor.js:7477:88
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at http://localhost:4200/vendor.js:8217:22
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at Observable.init [as _subscribe] (http://localhost:4200/vendor.js:7246:41)
+    at Observable._trySubscribe (http://localhost:4200/vendor.js:5789:19)
+    at http://localhost:4200/vendor.js:5782:113 user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 OPR/95.0.0.0 (Edition Yx 05)
+2023-03-06T17:52:51.978Z LogLevel 5 Message: Error: OK
+    at http://localhost:4200/main.js:331:19
+    at http://localhost:4200/vendor.js:7477:88
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at http://localhost:4200/vendor.js:8217:22
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at Observable.init [as _subscribe] (http://localhost:4200/vendor.js:7246:41)
+    at Observable._trySubscribe (http://localhost:4200/vendor.js:5789:19)
+    at http://localhost:4200/vendor.js:5782:113 user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 OPR/95.0.0.0 (Edition Yx 05)
+2023-03-06T17:57:50.525Z LogLevel 5 Message: Error: OK
+    at http://localhost:4200/main.js:331:19
+    at http://localhost:4200/vendor.js:7477:88
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at http://localhost:4200/vendor.js:8217:22
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at Observable.init [as _subscribe] (http://localhost:4200/vendor.js:7246:41)
+    at Observable._trySubscribe (http://localhost:4200/vendor.js:5789:19)
+    at http://localhost:4200/vendor.js:5782:113 user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 OPR/95.0.0.0 (Edition Yx 05)
+2023-03-06T17:59:12.526Z LogLevel 5 Message: Error: OK
+    at http://localhost:4200/main.js:331:19
+    at http://localhost:4200/vendor.js:7477:88
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at http://localhost:4200/vendor.js:8217:22
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at Observable.init [as _subscribe] (http://localhost:4200/vendor.js:7246:41)
+    at Observable._trySubscribe (http://localhost:4200/vendor.js:5789:19)
+    at http://localhost:4200/vendor.js:5782:113 user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 OPR/95.0.0.0 (Edition Yx 05)
+2023-03-06T18:00:43.807Z LogLevel 5 Message: Error: OK
+    at http://localhost:4200/main.js:331:19
+    at http://localhost:4200/vendor.js:7477:88
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at http://localhost:4200/vendor.js:8217:22
+    at OperatorSubscriber._error (http://localhost:4200/vendor.js:7338:9)
+    at OperatorSubscriber.error (http://localhost:4200/vendor.js:6248:12)
+    at Observable.init [as _subscribe] (http://localhost:4200/vendor.js:7246:41)
+    at Observable._trySubscribe (http://localhost:4200/vendor.js:5789:19)
+    at http://localhost:4200/vendor.js:5782:113 user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 OPR/95.0.0.0 (Edition Yx 05)

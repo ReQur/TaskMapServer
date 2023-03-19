@@ -13,7 +13,7 @@ namespace dotnetserver
         Task<BoardTask[]> GetBoardTasks(string boardId);
         Task AddTask(BoardTask newTask);
         Task DeleteTask(string _taskId);
-        Task UpdatePriority(uint taskToMove, uint posBefore);
+        Task UpdatePriority(uint taskToMove, uint posBefore, uint _boardId);
 
     }
     public class TaskService: WithDbAccess, ITaskService
@@ -71,14 +71,15 @@ namespace dotnetserver
             await DbExecuteAsync(sql, parameters, transaction: true);
         }
 
-        public async Task UpdatePriority(uint _taskToMove, uint _posBefore)
+        public async Task UpdatePriority(uint _taskToMove, uint _posBefore, uint _boardId)
         {
-            var parameters = new { taskToMove = _taskToMove, posBefore= _posBefore};
+            var parameters = new { taskToMove = _taskToMove, posBefore = _posBefore, boardId = _boardId };
             var sql = @"";
             if (_posBefore == 0)
                 sql = @"SELECT next_task_id INTO @_next_task_id FROM task WHERE taskId=@taskToMove;
                 UPDATE task SET next_task_id = @_next_task_id WHERE next_task_id=@taskToMove;
-                UPDATE task SET next_task_id = @taskToMove WHERE next_task_id IS NULL;
+                UPDATE task SET boardId = @boardId WHERE taskId=@taskToMove;
+                UPDATE task SET next_task_id = @taskToMove WHERE next_task_id IS NULL and boardId=@boardId;
                 UPDATE task SET next_task_id = NULL WHERE taskId=@taskToMove;";
             else
                 sql = @"SELECT next_task_id INTO @_next_task_id FROM task WHERE taskId=@taskToMove;

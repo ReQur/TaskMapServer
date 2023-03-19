@@ -122,20 +122,27 @@ namespace dotnetserver.Controllers
             }
         }
 
-        /// <summary>
-        /// Takes task and move it to new position in list
-        /// </summary>
+
+        ///<remarks>
+        /// ```
+        /// Takes task and move it to new position in TaskList of board
+        ///     Parameter:
+        ///         * *taskIdToMove* - ID of task that wanted to be moved; 
+        ///         * *boardId* - ID of board that affected in transition (only destination board); 
+        ///         * *insertAfterId* - ID of task that would predicate moved task after transition (set 0 if insertation at the beginning needed); 
+        /// ```
+        /// </remarks>
         /// <returns>200/500 on success/error</returns>
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(Boolean), 200)]
-        [HttpPut("list/{taskToMove}&{posBefore}")]
+        [HttpPut("list/{taskIdToMove}&{boardId}&{insertAfterId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> UpdateTaskPriority(uint taskToMove, uint posBefore)
+        public async Task<IActionResult> UpdateTaskPriority(uint taskIdToMove, uint boardId, uint insertAfterId)
         {
             try
             {
-                await _taskService.UpdatePriority(taskToMove, posBefore);
+                await _taskService.UpdatePriority(taskIdToMove, insertAfterId, boardId);
                 return Ok(true);
             }
             catch (Exception ex)

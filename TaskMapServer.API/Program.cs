@@ -101,6 +101,8 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
+    var filePath = Path.Combine(System.AppContext.BaseDirectory, "dotnetserver.xml");
+    c.IncludeXmlComments(filePath);
 });
 
 var app = builder.Build();
