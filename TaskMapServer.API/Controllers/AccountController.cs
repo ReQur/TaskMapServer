@@ -223,7 +223,7 @@ namespace dotnetserver.Controllers
                 firstName = user.firstName,
                 lastName = user.lastName,
                 lastBoardId = user.lastBoardId,
-                avatar = user.avatar
+                avatar = _baseAvatarUrl + user.avatar
             });
         }
 
@@ -318,11 +318,24 @@ namespace dotnetserver.Controllers
         }
 
         [HttpPost("upload-avatar/")]
-        public async Task<IActionResult> UploadAvatart(IFormFile avatart)
+        [Authorize]
+        public async Task<IActionResult> UploadAvatar(IFormFile avatar)
         {
             var userName = User.Identity?.Name;
-            await _awsService.Upload(avatart, userName);
-            await _userService.SetAvatart(userName, _baseAvatarUrl + userName + "-avatar");
+            if (userName is null) return Unauthorized();
+
+            var newAvatarKey = userName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
+            var currentAvatarKey = (await _userService.GetUserData(userName)).avatar;
+            try
+            {
+                await _awsService.Upload(avatar, newAvatarKey);
+            }
+            catch
+            {
+                return StatusCode(500, "Failed to upload file to external storage. Please try again later.");
+            }
+            await _userService.SetAvatart(userName, newAvatarKey);
+            if (currentAvatarKey != null) await _awsService.DeleteFile(currentAvatarKey);
             return Ok();
         }
     }
