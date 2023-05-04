@@ -58,7 +58,7 @@ namespace dotnetserver
             var parameters = new { boardId = _boardId, userId = _userId };
             var sql = @"SELECT board.*, utb.access_level as accessRights
                         FROM board LEFT JOIN user_to_board utb on board.boardId = utb.boardId 
-                        WHERE board.userId=@userId AND boardId=@boardId AND utb.userId = @userId";
+                        WHERE board.userId=@userId AND board.boardId=@boardId AND utb.userId = @userId";
             var _board = await DbQueryAsync<SharedInfoBoard>(sql, parameters);
             return _board.First();
         }
