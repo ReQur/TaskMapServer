@@ -16,4 +16,18 @@
 
     }
 
+    public class SharedInfoBoard : Board
+    {
+        public string accessRights { get; set; }
+        public bool isShared{ get; set; }
+
+    }
+
+    public class ShareRequest
+    {
+        public uint boardId { get; set; }
+        public string accessRights { get; set; }
+        public IEnumerable<uint> userIdList { get; set; }
+    }
+
 }

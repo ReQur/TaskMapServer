@@ -1,0 +1,1 @@
+DROP TRIGGER link_board_to_user_on_creation;
