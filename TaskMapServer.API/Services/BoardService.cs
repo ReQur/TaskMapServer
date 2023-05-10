@@ -49,8 +49,15 @@ namespace dotnetserver
             var parameters = new { userId = _userId };
             var sql = @"SELECT board.*, utb.access_level as accessRights
                         FROM board LEFT JOIN user_to_board utb on board.boardId = utb.boardId 
-                        WHERE board.userId=@userId AND utb.userId = @userId";
-            return await DbQueryAsync<SharedInfoBoard>(sql, parameters);
+                        WHERE utb.userId = @userId";
+            var boards = await DbQueryAsync<SharedInfoBoard>(sql, parameters);
+            if (boards == null)
+            {
+                throw new Exception($"User {_userId} have no any boards");
+            }
+            var filteredBoards = boards
+                .Where(b => b != null && (b.userId.ToString() == _userId || b.isShared));
+            return filteredBoards;
         }
 
         public async Task<SharedInfoBoard> GetBoardInfo(string _boardId, string _userId)
@@ -102,8 +109,9 @@ namespace dotnetserver
             sql.Length--;
 
             sql.Append(" ON DUPLICATE KEY UPDATE access_level = VALUES(access_level);");
+            sql.Append("UPDATE board SET isShared=1 WHERE boardId=@boardId0;");
 
-            await DbExecuteAsync(sql.ToString(), parameters);
+            await DbExecuteAsync(sql.ToString(), parameters, transaction: true);
         }
 
         public async Task<string> GetUserAccessLevel(string userId, uint boardId)

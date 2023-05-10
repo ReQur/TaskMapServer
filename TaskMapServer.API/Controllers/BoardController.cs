@@ -54,8 +54,20 @@ namespace dotnetserver.Controllers
         {
             var userId = await _userService.GetUserId(User.Identity?.Name);
             _logger.LogInformation($"Receive get boards request from user with id {userId}");
-            var res = await _boardService.GetBoards(userId);
-            return Ok(res);
+            try
+            {
+                var res = await _boardService.GetBoards(userId);
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                if (ex.Message.Contains("have no any boards"))
+                {
+                    return Ok();
+                }
+                return StatusCode(500, "Internal server error. Please try again later.");
+            }
         }
 
         /// <summary>
@@ -118,7 +130,7 @@ namespace dotnetserver.Controllers
         {
             var userId = await _userService.GetUserId(User.Identity?.Name);
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
-             await _boardService.AddNewBoard(newBoard, userId);
+            await _boardService.AddNewBoard(newBoard, userId);
             return Ok();
         }
 
@@ -201,7 +213,48 @@ namespace dotnetserver.Controllers
                 }
 
                 await _boardService.ShareBoard(request);
-                await _boardService.SetSharedFlag(request.boardId, true);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return StatusCode(500, "Internal server error. Please try again later.");
+            }
+        }
+
+        /// <summary>
+        /// Revokes shared access to a board.
+        /// </summary>
+        /// <remarks>
+        /// This method revokes the shared access to a specific board by changing the `isShared` flag to `false`.
+        /// Only users with 'administrating' access level can revoke shared access.
+        ///
+        /// Example request:
+        /// 
+        ///     PUT {host}/api/board/unshare/5
+        ///     
+        /// where `5` is the ID of the board that you want to unshare.
+        ///
+        /// </remarks>
+        /// <param name="boardId">The ID of the board to unshare.</param>
+        /// <returns>Nothing</returns>
+        /// <response code="200">If the operation was successful.</response>
+        /// <response code="403">If the user does not have sufficient permissions.</response>
+        /// <response code="500">If an internal server error occurred.</response>
+        [HttpPut("unshare/{boardId}")]
+        public async Task<IActionResult> UnShareBoard(uint boardId)
+        {
+            var userId = await _userService.GetUserId(User.Identity?.Name);
+            try
+            {
+                // Проверка прав доступа пользователя
+                var userAccessLevel = await _boardService.GetUserAccessLevel(userId, boardId);
+                if (userAccessLevel != "administrating")
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, "Insufficient permissions");
+                }
+
+                await _boardService.SetSharedFlag(boardId, false);
                 return Ok();
             }
             catch (Exception ex)
@@ -211,5 +264,4 @@ namespace dotnetserver.Controllers
             }
         }
     }
-
 }
