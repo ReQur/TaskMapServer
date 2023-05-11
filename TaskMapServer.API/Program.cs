@@ -10,6 +10,8 @@ using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using dotnetserver.Controllers;
+using dotnetserver.BoardNotificationHub;
 
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -70,6 +72,7 @@ builder.Services.AddCors(options =>
         });
 }); ;
 
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -126,5 +129,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<BoardNotificationsHub>("/notificationHub");
 
 app.Run();

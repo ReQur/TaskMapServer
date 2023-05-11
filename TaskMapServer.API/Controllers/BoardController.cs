@@ -2,10 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
+using dotnetserver.BoardNotificationHub;
 using dotnetserver.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 
 namespace dotnetserver.Controllers
@@ -18,12 +21,14 @@ namespace dotnetserver.Controllers
         private readonly ILogger<BoardController> _logger;
         private readonly IUserService _userService;
         private readonly IBoardService _boardService;
+        private readonly IHubContext<BoardNotificationsHub> _hubContext;
 
-        public BoardController(ILogger<BoardController> logger, IUserService userService, IBoardService boardService)
+        public BoardController(ILogger<BoardController> logger, IUserService userService, IBoardService boardService, IHubContext<BoardNotificationsHub> hubContext)
         {
             _logger = logger;
             _userService = userService;
             _boardService = boardService;
+            _hubContext = hubContext;
         }
 
         /// <summary>
@@ -157,6 +162,7 @@ namespace dotnetserver.Controllers
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [HttpPut]
+        [SendNotification]
         public async Task<IActionResult> ChangeBoardInformation([FromBody, Required] Board board)
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");
@@ -207,7 +213,7 @@ namespace dotnetserver.Controllers
             {
                 // Проверка прав доступа пользователя
                 var userAccessLevel = await _boardService.GetUserAccessLevel(userId, request.boardId);
-                if (userAccessLevel != "administrating")
+                if (!BoardPermissions.canAdministrate(userAccessLevel))
                 {
                     return StatusCode((int)HttpStatusCode.Forbidden, "Insufficient permissions");
                 }
@@ -249,7 +255,7 @@ namespace dotnetserver.Controllers
             {
                 // Проверка прав доступа пользователя
                 var userAccessLevel = await _boardService.GetUserAccessLevel(userId, boardId);
-                if (userAccessLevel != "administrating")
+                if (!BoardPermissions.canAdministrate(userAccessLevel))
                 {
                     return StatusCode((int)HttpStatusCode.Forbidden, "Insufficient permissions");
                 }
