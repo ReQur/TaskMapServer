@@ -118,6 +118,8 @@ namespace dotnetserver
                         UPDATE user
                             SET lastBoardId = (SELECT LAST_INSERT_ID())
                             WHERE userId = @_userId;
+                        INSERT INTO user_to_board(userId, boardId,access_level)
+                            VALUES (@_userId, LAST_INSERT_ID(), 'administrating');
                         SELECT @_userId";
             try
             {
