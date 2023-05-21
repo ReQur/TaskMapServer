@@ -338,5 +338,18 @@ namespace dotnetserver.Controllers
             if (currentAvatarKey != null) await _awsService.DeleteFile(currentAvatarKey);
             return Ok();
         }
+
+        /// <summary>
+        /// Returns Id of last board that was used by user.
+        /// </summary>
+        /// <returns>user.lastBoardId</returns>
+        /// <response code="401">If user unauthorized</response>
+        /// <response code="200">Success</response>
+        [HttpGet("list")]
+        public async Task<IActionResult> GetLUserList()
+        {
+            var users = await _userService.GetUserList();
+            return Ok(users);
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace dotnetserver
         Task<uint> RegisterUser(SignUpUser user);
         Task SetLastBoardId(string boardId);
         Task SetAvatart(string userName, string avatar);
-
+        Task<IEnumerable<UserForList>> GetUserList();
     }
 
     public class UserService : WithDbAccess, IUserService
@@ -111,7 +111,7 @@ namespace dotnetserver
         public async Task<uint> RegisterUser(SignUpUser user)
         {
             var sql = @"INSERT INTO user(username, firstName, lastName, password, avatar) 
-                            VALUES(@username, @firstName, @lastName, @password, @avatar);
+                            VALUES(@username, @firstName, @lastName, @password, 'https://storage.yandexcloud.net/tm-bucket/default_avatar');
                         SELECT LAST_INSERT_ID() INTO @_userId;
                         INSERT INTO board(userId, boardName,  boardDescription) 
                             VALUES(@_userId, 'Default', 'Your first board');
@@ -159,6 +159,22 @@ namespace dotnetserver
             {
                 throw (new Exception($"Was try to set avatar for user"));
             }
+        }
+
+        public async Task<IEnumerable<UserForList>> GetUserList()
+        {
+            var sql = "SELECT userId, username, avatar FROM user";
+            try
+            {
+                var user = await DbQueryAsync<UserForList>(sql, new {});
+                return user;
+
+            }
+            catch (Exception e)
+            {
+                throw (new Exception("Was try to get data of list of users"));
+            }
+
         }
     }
 
