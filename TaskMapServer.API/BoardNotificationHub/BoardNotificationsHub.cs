@@ -1,5 +1,7 @@
-﻿using dotnetserver.Models;
+﻿using dotnetserver.Controllers;
+using dotnetserver.Models;
 using Microsoft.AspNetCore.SignalR;
+using Org.BouncyCastle.Crypto.Tls;
 using System.Net;
 using System.Threading.Tasks;
 using Ubiety.Dns.Core;
@@ -10,11 +12,19 @@ namespace dotnetserver.BoardNotificationHub
     {
         private readonly IUserService _userService;
         private readonly IBoardService _boardService;
+        private readonly ILogger<BoardNotificationsHub> _logger;
 
-        public BoardNotificationsHub(IUserService userService, IBoardService boardService)
+        public BoardNotificationsHub(IUserService userService, IBoardService boardService, ILogger<BoardNotificationsHub> logger)
         {
             _userService = userService;
             _boardService = boardService;
+            _logger= logger;
+        }
+
+        public override Task OnConnectedAsync()
+        {
+            _logger.LogInformation($"Got new connection with ID: {Context.ConnectionId}");
+            return base.OnConnectedAsync();
         }
 
         /// <summary>
@@ -49,6 +59,7 @@ namespace dotnetserver.BoardNotificationHub
                     throw new HubException("Insufficient permissions");
                 }
                 await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+                _logger.LogInformation($"User: {userId} with connectionID: {Context.ConnectionId} joined to board {groupName}");
             }
             catch (Exception ex)
             {
@@ -76,6 +87,9 @@ namespace dotnetserver.BoardNotificationHub
             try
             {
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
+                _logger.LogInformation($"User with connectionID: {Context.ConnectionId} left grom the board {groupName}");
+
+
             }
             catch (Exception ex)
             {
