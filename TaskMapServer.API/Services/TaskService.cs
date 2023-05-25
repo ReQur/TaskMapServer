@@ -65,7 +65,7 @@ namespace dotnetserver
         public async Task<BoardTask> GetTask(string _taskId)
         {
             var parameters = new { taskId = _taskId };
-            var sql = @"DELETE * FROM task WHERE taskId = @taskId;";
+            var sql = @"SELECT * FROM task WHERE taskId = @taskId;";
             var tasks = await DbQueryAsync<BoardTask>(sql, parameters, transaction: true);
             return tasks.Last();
         }
