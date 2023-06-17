@@ -1,5 +1,6 @@
 ﻿using dotnetserver.Controllers;
 using dotnetserver.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Org.BouncyCastle.Crypto.Tls;
 using System.Net;
@@ -8,6 +9,7 @@ using Ubiety.Dns.Core;
 
 namespace dotnetserver.BoardNotificationHub
 {
+    [Authorize]
     public class BoardNotificationsHub : Hub
     {
         private readonly IUserService _userService;

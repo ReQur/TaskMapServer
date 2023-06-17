@@ -482,3 +482,146 @@
     at Observable.init [as _subscribe] (http://localhost:4200/vendor.js:7246:41)
     at Observable._trySubscribe (http://localhost:4200/vendor.js:5789:19)
     at http://localhost:4200/vendor.js:5782:113 user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 OPR/95.0.0.0 (Edition Yx 05)
+2023-06-17T10:58:17.906Z LogLevel 5 Message: Error: Failed to complete negotiation with the server: Error: : Status code '401'
+    at HttpConnection.<anonymous> (http://localhost:4200/chunk-XG2DWAYL.js:5900:31)
+    at Generator.throw (<anonymous>)
+    at rejected (http://localhost:4200/chunk-XALQWJOM.js:38:29)
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:158)
+    at Object.onInvoke (http://localhost:4200/chunk-UPADKI3T.js:15710:25)
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:46)
+    at Zone2.run (http://localhost:4200/polyfills.js:105:35)
+    at http://localhost:4200/polyfills.js:1032:28
+    at _ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:324:171)
+    at http://localhost:4200/chunk-UPADKI3T.js:15540:49 user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 OPR/99.0.0.0 (Edition Yx)
+2023-06-17T10:58:17.985Z LogLevel 5 Message: Error: Uncaught (in promise): Error: Cannot send data if the connection is not in the 'Connected' State.
+Error: Cannot send data if the connection is not in the 'Connected' State.
+    at HttpConnection.send (http://localhost:4200/chunk-XG2DWAYL.js:5763:29)
+    at HubConnection._sendMessage (http://localhost:4200/chunk-XG2DWAYL.js:4732:28)
+    at HubConnection._sendWithProtocol (http://localhost:4200/chunk-XG2DWAYL.js:4739:17)
+    at http://localhost:4200/chunk-XG2DWAYL.js:4787:33
+    at new ZoneAwarePromise (http://localhost:4200/polyfills.js:1176:21)
+    at HubConnection.invoke (http://localhost:4200/chunk-XG2DWAYL.js:4770:15)
+    at _SignalRService.joinBoard (http://localhost:4200/chunk-XG2DWAYL.js:6365:24)
+    at Object.next (http://localhost:4200/chunk-XG2DWAYL.js:6396:146)
+    at source.subscribe.isUnsub (http://localhost:4200/chunk-UPADKI3T.js:2433:74)
+    at OperatorSubscriber._next (http://localhost:4200/chunk-UPADKI3T.js:1040:9)
+    at resolvePromise (http://localhost:4200/polyfills.js:984:19)
+    at http://localhost:4200/polyfills.js:913:9
+    at http://localhost:4200/polyfills.js:927:25
+    at http://localhost:4200/chunk-XG2DWAYL.js:4788:9
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:158)
+    at Object.onInvoke (http://localhost:4200/chunk-UPADKI3T.js:15710:25)
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:46)
+    at Zone2.run (http://localhost:4200/polyfills.js:105:35)
+    at http://localhost:4200/polyfills.js:1032:28
+    at _ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:324:171) user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 OPR/99.0.0.0 (Edition Yx)
+2023-06-17T10:58:18.179Z LogLevel 5 Message: Error: Uncaught (in promise): Error: Cannot send data if the connection is not in the 'Connected' State.
+Error: Cannot send data if the connection is not in the 'Connected' State.
+    at HttpConnection.send (http://localhost:4200/chunk-XG2DWAYL.js:5763:29)
+    at HubConnection._sendMessage (http://localhost:4200/chunk-XG2DWAYL.js:4732:28)
+    at HubConnection._sendWithProtocol (http://localhost:4200/chunk-XG2DWAYL.js:4739:17)
+    at http://localhost:4200/chunk-XG2DWAYL.js:4787:33
+    at new ZoneAwarePromise (http://localhost:4200/polyfills.js:1176:21)
+    at HubConnection.invoke (http://localhost:4200/chunk-XG2DWAYL.js:4770:15)
+    at _SignalRService.joinBoard (http://localhost:4200/chunk-XG2DWAYL.js:6365:24)
+    at Object.next (http://localhost:4200/chunk-XG2DWAYL.js:6396:146)
+    at source.subscribe.isUnsub (http://localhost:4200/chunk-UPADKI3T.js:2433:74)
+    at OperatorSubscriber._next (http://localhost:4200/chunk-UPADKI3T.js:1040:9)
+    at resolvePromise (http://localhost:4200/polyfills.js:984:19)
+    at http://localhost:4200/polyfills.js:913:9
+    at http://localhost:4200/polyfills.js:927:25
+    at http://localhost:4200/chunk-XG2DWAYL.js:4788:9
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:158)
+    at Object.onInvoke (http://localhost:4200/chunk-UPADKI3T.js:15710:25)
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:46)
+    at Zone2.run (http://localhost:4200/polyfills.js:105:35)
+    at http://localhost:4200/polyfills.js:1032:28
+    at _ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:324:171) user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 OPR/99.0.0.0 (Edition Yx)
+2023-06-17T10:58:51.857Z LogLevel 5 Message: Error: Uncaught (in promise): Error: Cannot send data if the connection is not in the 'Connected' State.
+Error: Cannot send data if the connection is not in the 'Connected' State.
+    at HttpConnection.send (http://localhost:4200/chunk-XG2DWAYL.js:5763:29)
+    at HubConnection._sendMessage (http://localhost:4200/chunk-XG2DWAYL.js:4732:28)
+    at HubConnection._sendWithProtocol (http://localhost:4200/chunk-XG2DWAYL.js:4739:17)
+    at http://localhost:4200/chunk-XG2DWAYL.js:4787:33
+    at new ZoneAwarePromise (http://localhost:4200/polyfills.js:1176:21)
+    at HubConnection.invoke (http://localhost:4200/chunk-XG2DWAYL.js:4770:15)
+    at _SignalRService.joinBoard (http://localhost:4200/chunk-XG2DWAYL.js:6365:24)
+    at Object.next (http://localhost:4200/chunk-XG2DWAYL.js:6396:146)
+    at source.subscribe.isUnsub (http://localhost:4200/chunk-UPADKI3T.js:2433:74)
+    at OperatorSubscriber._next (http://localhost:4200/chunk-UPADKI3T.js:1040:9)
+    at resolvePromise (http://localhost:4200/polyfills.js:984:19)
+    at http://localhost:4200/polyfills.js:913:9
+    at http://localhost:4200/polyfills.js:927:25
+    at http://localhost:4200/chunk-XG2DWAYL.js:4788:9
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:158)
+    at Object.onInvoke (http://localhost:4200/chunk-UPADKI3T.js:15710:25)
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:46)
+    at Zone2.run (http://localhost:4200/polyfills.js:105:35)
+    at http://localhost:4200/polyfills.js:1032:28
+    at _ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:324:171) user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 OPR/99.0.0.0 (Edition Yx)
+2023-06-17T10:58:51.888Z LogLevel 5 Message: Error: Uncaught (in promise): Error: Cannot send data if the connection is not in the 'Connected' State.
+Error: Cannot send data if the connection is not in the 'Connected' State.
+    at HttpConnection.send (http://localhost:4200/chunk-XG2DWAYL.js:5763:29)
+    at HubConnection._sendMessage (http://localhost:4200/chunk-XG2DWAYL.js:4732:28)
+    at HubConnection._sendWithProtocol (http://localhost:4200/chunk-XG2DWAYL.js:4739:17)
+    at http://localhost:4200/chunk-XG2DWAYL.js:4787:33
+    at new ZoneAwarePromise (http://localhost:4200/polyfills.js:1176:21)
+    at HubConnection.invoke (http://localhost:4200/chunk-XG2DWAYL.js:4770:15)
+    at _SignalRService.joinBoard (http://localhost:4200/chunk-XG2DWAYL.js:6365:24)
+    at Object.next (http://localhost:4200/chunk-XG2DWAYL.js:6396:146)
+    at source.subscribe.isUnsub (http://localhost:4200/chunk-UPADKI3T.js:2433:74)
+    at OperatorSubscriber._next (http://localhost:4200/chunk-UPADKI3T.js:1040:9)
+    at resolvePromise (http://localhost:4200/polyfills.js:984:19)
+    at http://localhost:4200/polyfills.js:913:9
+    at http://localhost:4200/polyfills.js:927:25
+    at http://localhost:4200/chunk-XG2DWAYL.js:4788:9
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:158)
+    at Object.onInvoke (http://localhost:4200/chunk-UPADKI3T.js:15710:25)
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:46)
+    at Zone2.run (http://localhost:4200/polyfills.js:105:35)
+    at http://localhost:4200/polyfills.js:1032:28
+    at _ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:324:171) user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 OPR/99.0.0.0 (Edition Yx)
+2023-06-17T10:59:03.643Z LogLevel 5 Message: Error: Uncaught (in promise): Error: Cannot send data if the connection is not in the 'Connected' State.
+Error: Cannot send data if the connection is not in the 'Connected' State.
+    at HttpConnection.send (http://localhost:4200/chunk-XG2DWAYL.js:5763:29)
+    at HubConnection._sendMessage (http://localhost:4200/chunk-XG2DWAYL.js:4732:28)
+    at HubConnection._sendWithProtocol (http://localhost:4200/chunk-XG2DWAYL.js:4739:17)
+    at http://localhost:4200/chunk-XG2DWAYL.js:4787:33
+    at new ZoneAwarePromise (http://localhost:4200/polyfills.js:1176:21)
+    at HubConnection.invoke (http://localhost:4200/chunk-XG2DWAYL.js:4770:15)
+    at _SignalRService.joinBoard (http://localhost:4200/chunk-XG2DWAYL.js:6365:24)
+    at Object.next (http://localhost:4200/chunk-XG2DWAYL.js:6396:146)
+    at source.subscribe.isUnsub (http://localhost:4200/chunk-UPADKI3T.js:2433:74)
+    at OperatorSubscriber._next (http://localhost:4200/chunk-UPADKI3T.js:1040:9)
+    at resolvePromise (http://localhost:4200/polyfills.js:984:19)
+    at http://localhost:4200/polyfills.js:913:9
+    at http://localhost:4200/polyfills.js:927:25
+    at http://localhost:4200/chunk-XG2DWAYL.js:4788:9
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:158)
+    at Object.onInvoke (http://localhost:4200/chunk-UPADKI3T.js:15710:25)
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:46)
+    at Zone2.run (http://localhost:4200/polyfills.js:105:35)
+    at http://localhost:4200/polyfills.js:1032:28
+    at _ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:324:171) user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 OPR/99.0.0.0 (Edition Yx)
+2023-06-17T10:59:03.659Z LogLevel 5 Message: Error: Uncaught (in promise): Error: Cannot send data if the connection is not in the 'Connected' State.
+Error: Cannot send data if the connection is not in the 'Connected' State.
+    at HttpConnection.send (http://localhost:4200/chunk-XG2DWAYL.js:5763:29)
+    at HubConnection._sendMessage (http://localhost:4200/chunk-XG2DWAYL.js:4732:28)
+    at HubConnection._sendWithProtocol (http://localhost:4200/chunk-XG2DWAYL.js:4739:17)
+    at http://localhost:4200/chunk-XG2DWAYL.js:4787:33
+    at new ZoneAwarePromise (http://localhost:4200/polyfills.js:1176:21)
+    at HubConnection.invoke (http://localhost:4200/chunk-XG2DWAYL.js:4770:15)
+    at _SignalRService.joinBoard (http://localhost:4200/chunk-XG2DWAYL.js:6365:24)
+    at Object.next (http://localhost:4200/chunk-XG2DWAYL.js:6396:146)
+    at source.subscribe.isUnsub (http://localhost:4200/chunk-UPADKI3T.js:2433:74)
+    at OperatorSubscriber._next (http://localhost:4200/chunk-UPADKI3T.js:1040:9)
+    at resolvePromise (http://localhost:4200/polyfills.js:984:19)
+    at http://localhost:4200/polyfills.js:913:9
+    at http://localhost:4200/polyfills.js:927:25
+    at http://localhost:4200/chunk-XG2DWAYL.js:4788:9
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:158)
+    at Object.onInvoke (http://localhost:4200/chunk-UPADKI3T.js:15710:25)
+    at _ZoneDelegate.invoke (http://localhost:4200/polyfills.js:298:46)
+    at Zone2.run (http://localhost:4200/polyfills.js:105:35)
+    at http://localhost:4200/polyfills.js:1032:28
+    at _ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:324:171) user uses agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 OPR/99.0.0.0 (Edition Yx)
