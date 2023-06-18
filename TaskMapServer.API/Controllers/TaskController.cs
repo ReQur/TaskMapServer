@@ -64,7 +64,6 @@ namespace dotnetserver.Controllers
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(BoardTask), 200)]
         [HttpPut()]
-        [SendNotification]
         public async Task<IActionResult> EditTask([FromBody, Required] BoardTask task)
         {
             try
@@ -87,7 +86,6 @@ namespace dotnetserver.Controllers
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(BoardTask), 200)]
         [HttpPost()]
-        [SendNotification]
         public async Task<IActionResult> AddTask([FromBody, Required] BoardTask newTask)
         {
             Console.WriteLine(newTask);
@@ -113,7 +111,6 @@ namespace dotnetserver.Controllers
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(Boolean), 200)]
         [HttpDelete("{taskId}")]
-        [SendNotification]
         public async Task<IActionResult> DeleteTask(uint taskId)
         {
             try
@@ -148,18 +145,6 @@ namespace dotnetserver.Controllers
             try
             {
                 var currentBoard = (await _taskService.GetTask(taskIdToMove.ToString())).boardId;
-                try
-                {
-                    if (boardId != currentBoard)
-                    {
-                        _boardHubContext.Clients?.Group(boardId.ToString()).SendAsync("ReceiveNotification", boardId.ToString());
-                        _boardHubContext.Clients?.Group(currentBoard.ToString()).SendAsync("ReceiveNotification", currentBoard.ToString());
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex.Message);
-                }
                 await _taskService.UpdatePriority(taskIdToMove, insertAfterId, boardId);
                 return Ok(true);
             }

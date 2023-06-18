@@ -162,7 +162,6 @@ namespace dotnetserver.Controllers
         /// <response code="401">If user unauthorized</response>
         /// <response code="200">Success</response>
         [HttpPut]
-        [SendNotification]
         public async Task<IActionResult> ChangeBoardInformation([FromBody, Required] Board board)
         {
             _logger.LogInformation($"Receive get request from {HttpContext.Request.Headers["origin"]}");

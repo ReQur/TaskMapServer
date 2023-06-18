@@ -29,6 +29,18 @@ namespace dotnetserver.BoardNotificationHub
             return base.OnConnectedAsync();
         }
 
+        public async Task BoardTaskListChangedNotification(uint boardId)
+        {
+            _logger.LogInformation($"New task list event on: {boardId}");
+            await Clients.OthersInGroup(boardId.ToString()).SendAsync("TaskListChangedNotification", boardId.ToString());
+        }
+
+        public async Task BoardChangedNotification(uint boardId)
+        {
+            _logger.LogInformation($"New board event on: {boardId}");
+            await Clients.OthersInGroup(boardId.ToString()).SendAsync("BoardChangedNotification", boardId.ToString());
+        }
+
         /// <summary>
         /// Joins a user to a specific board.
         /// </summary>
