@@ -13,7 +13,7 @@ namespace dotnetserver
     {
         Task ChangeBoardInformation(Board newBoard);
         Task<IEnumerable<SharedInfoBoard>> GetBoards(string userId);
-        Task AddNewBoard(Board newBoard, string userId);
+        Task<Board> AddNewBoard(Board newBoard, string userId);
         Task DeleteBoard(string boardId);
         Task<SharedInfoBoard> GetBoardInfo(string boardId, string userId);
         Task ShareBoard(ShareRequest request);
@@ -70,7 +70,7 @@ namespace dotnetserver
             return _board.First();
         }
 
-        public async Task AddNewBoard(Board newBoard, string userId)
+        public async Task<Board> AddNewBoard(Board newBoard, string userId)
         {
             _logger.LogDebug($"User[{userId}] has started creation new board with: " +
                              $"newBoard.boardDescription - {newBoard.boardDescription}, " +
@@ -78,9 +78,12 @@ namespace dotnetserver
             newBoard.userId = uint.Parse(userId);
             var sql = @"INSERT INTO board(userId, boardName,boardDescription) 
                             VALUES(@userId, @boardName,@boardDescription);
+                        SELECT LAST_INSERT_ID() INTO @_boardId;
                         INSERT INTO user_to_board(userId, boardId,access_level)
-                            VALUES (@userId, LAST_INSERT_ID(), 'administrating');";
-            await DbExecuteAsync(sql, newBoard, transaction: true);
+                            VALUES (@userId, LAST_INSERT_ID(), 'administrating');
+                        SELECT * FROM board WHERE boardId=@_boardId";
+            var board = await DbQueryAsync<Board>(sql, newBoard, transaction: true);
+            return board.FirstOrDefault();
         }
 
         public async Task DeleteBoard(string boardId)

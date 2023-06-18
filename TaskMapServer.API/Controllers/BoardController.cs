@@ -135,8 +135,16 @@ namespace dotnetserver.Controllers
         {
             var userId = await _userService.GetUserId(User.Identity?.Name);
             _logger.LogInformation($"Receive post request from {HttpContext.Request.Headers["origin"]}");
-            await _boardService.AddNewBoard(newBoard, userId);
-            return Ok();
+            try
+            {
+                var board = await _boardService.AddNewBoard(newBoard, userId);
+                return Ok(board);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return Problem(detail: "Exception due creating the board:\n" + ex.Message, statusCode: 500);
+            }
         }
 
         /// <summary>
