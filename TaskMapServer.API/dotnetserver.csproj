@@ -19,6 +19,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="web.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="web.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.7.104.2" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.103.2" />
     <PackageReference Include="Dapper" Version="2.0.123" />
