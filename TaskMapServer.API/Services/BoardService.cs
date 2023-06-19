@@ -88,16 +88,33 @@ namespace dotnetserver
 
         public async Task DeleteBoard(string boardId)
         {
-            var parameters = new { BoardId = boardId };
-            var sql = @"UPDATE
-                             user
-                        SET lastBoardId = ( SELECT MIN(boardId)
-                                            FROM user_to_board
-                                            WHERE userId IN(SELECT userId FROM user WHERE lastBoardId = @BoardId)
-                                            AND boardId != @BoardId)
-                        WHERE userId IN(SELECT userId FROM user WHERE lastBoardId = @BoardId);
-                        DELETE FROM board WHERE boardId = @BoardId";
-            await DbExecuteAsync(sql, parameters);
+            var boardParameter = new { BoardId = boardId };
+            var sqlSelectUsers = @"SELECT userId FROM user WHERE lastBoardId = @BoardId";
+            var userIds = await DbQueryAsync<uint>(sqlSelectUsers, boardParameter);
+
+            if (userIds.Count() > 0)
+            {
+                var updateUserLastBoard = new DynamicParameters();
+                var updateUserLastBoardSql = new StringBuilder("");
+                int index = 0;
+                foreach (uint userId in userIds)
+                {
+                    updateUserLastBoardSql.Append($@"UPDATE 
+                                        user 
+                               SET lastBoardId = (SELECT MIN(boardId) 
+                                                  FROM user_to_board 
+                                                  WHERE userId = @userId{index} 
+                                                    AND boardId <> @boardId{index})
+                                WHERE userId = @userId{index};");
+                    updateUserLastBoard.Add($"userId{index}", userId);
+                    updateUserLastBoard.Add($"boardId{index}", boardId);
+                    index++;
+                }
+                await DbExecuteAsync(updateUserLastBoardSql.ToString(), updateUserLastBoard, transaction: true);
+            }
+
+            var deleteBoardSql = @"DELETE FROM board WHERE boardId=@BoardId";
+            await DbExecuteAsync(deleteBoardSql, boardParameter);
         }
 
         public async Task ShareBoard(ShareRequest request)
