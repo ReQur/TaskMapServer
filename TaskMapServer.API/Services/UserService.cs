@@ -13,7 +13,7 @@ namespace dotnetserver
         Task<string> GetUserId(string userName);
         Task<UserData> GetUserData(string userName);
         Task<uint> RegisterUser(SignUpUser user);
-        Task SetLastBoardId(string boardId);
+        Task SetLastBoardId(string boardId, string userId);
         Task SetAvatart(string userName, string avatar);
         Task<IEnumerable<UserForList>> GetUserList();
     }
@@ -133,10 +133,10 @@ namespace dotnetserver
             }
         }
 
-        public async Task SetLastBoardId(string boardId)
+        public async Task SetLastBoardId(string boardId, string userId)
         {
-            var parameters = new { boardId };
-            var sql = "UPDATE user SET lastBoardId=@boardId WHERE userId=(SELECT userId FROM board WHERE boardId=@boardId)";
+            var parameters = new { _boardId = boardId, _userId = userId };
+            var sql = "UPDATE user SET lastBoardId=@_boardId WHERE userId=@_userId";
             try
             {
                 await DbExecuteAsync(sql, parameters);

@@ -313,7 +313,9 @@ namespace dotnetserver.Controllers
         [HttpPatch("last-board/{boardId}")]
         public async Task<IActionResult> SetLastBoard(string boardId)
         {
-            await _userService.SetLastBoardId(boardId);
+            var userName = User.Identity?.Name;
+            var userId = await _userService.GetUserId(userName);
+            await _userService.SetLastBoardId(boardId, userId.ToString());
             return Ok();
         }
 
