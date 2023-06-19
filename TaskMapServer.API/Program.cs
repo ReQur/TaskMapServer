@@ -59,17 +59,35 @@ builder.Services.AddScoped<IClientLogService, ClientLogService>();
 builder.Services.AddScoped<IAWSService, AWSService>();
 
 
-builder.Services.AddCors(options =>
+if (builder.Environment.IsDevelopment())
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy =>
-        {
-            policy.AllowAnyMethod();
-            policy.AllowAnyHeader();
-            policy.AllowCredentials();
-            policy.WithExposedHeaders();
-        });
-}); ;
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+            policy =>
+            {
+                policy.SetIsOriginAllowed(_ => true);
+                policy.AllowAnyMethod();
+                policy.AllowAnyHeader();
+                policy.AllowCredentials();
+                policy.WithExposedHeaders();
+            });
+    }); ;
+}
+else
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+            policy =>
+            {
+                policy.AllowAnyMethod();
+                policy.AllowAnyHeader();
+                policy.AllowCredentials();
+                policy.WithExposedHeaders();
+            });
+    }); ;
+}
 
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
