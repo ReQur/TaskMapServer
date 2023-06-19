@@ -65,7 +65,7 @@ namespace dotnetserver
             var parameters = new { boardId = _boardId, userId = _userId };
             var sql = @"SELECT board.*, utb.access_level as accessRights
                         FROM board LEFT JOIN user_to_board utb on board.boardId = utb.boardId 
-                        WHERE board.userId=@userId AND board.boardId=@boardId AND utb.userId = @userId";
+                        WHERE board.boardId=@boardId AND utb.userId = @userId";
             var _board = await DbQueryAsync<SharedInfoBoard>(sql, parameters);
             return _board.First();
         }
@@ -89,7 +89,14 @@ namespace dotnetserver
         public async Task DeleteBoard(string boardId)
         {
             var parameters = new { BoardId = boardId };
-            var sql = @"DELETE FROM board WHERE boardId = @BoardId";
+            var sql = @"UPDATE
+                             user
+                        SET lastBoardId = ( SELECT MIN(boardId)
+                                            FROM user_to_board
+                                            WHERE userId IN(SELECT userId FROM user WHERE lastBoardId = @BoardId)
+                                            AND boardId != @BoardId)
+                        WHERE userId IN(SELECT userId FROM user WHERE lastBoardId = @BoardId);
+                        DELETE FROM board WHERE boardId = @BoardId";
             await DbExecuteAsync(sql, parameters);
         }
 
