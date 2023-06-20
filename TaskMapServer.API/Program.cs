@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using Serilog.Extensions.Logging.File;
 using System.Security.Claims;
 using dotnetserver.Controllers;
 using dotnetserver.BoardNotificationHub;
@@ -126,6 +127,9 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+var loggerFactory = app.Services.GetService<ILoggerFactory>();
+loggerFactory.AddFile(builder.Configuration["Logging:LogFilePath"].ToString());
 
 app.MigrateDatabase();
 

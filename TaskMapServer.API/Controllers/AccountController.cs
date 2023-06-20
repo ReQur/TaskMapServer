@@ -332,8 +332,9 @@ namespace dotnetserver.Controllers
             {
                 await _awsService.Upload(avatar, newAvatarKey);
             }
-            catch
+            catch (Exception e)
             {
+                _logger.LogError($"An exception occured during load the avatar: {e.Message}");
                 return StatusCode(500, "Failed to upload file to external storage. Please try again later.");
             }
             await _userService.SetAvatart(userName, newAvatarKey);

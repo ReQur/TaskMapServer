@@ -1,6 +1,7 @@
 .vs
 bin
 obj
-Artifacts/
+TaskMapServer.API/Artifacts/
 .idea
 .tmp
+TaskMapServer.API/Logs/*
