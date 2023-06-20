@@ -335,7 +335,7 @@ namespace dotnetserver.Controllers
             catch (Exception e)
             {
                 _logger.LogError($"An exception occured during load the avatar: {e.Message}");
-                return StatusCode(500, "Failed to upload file to external storage. Please try again later.");
+                return StatusCode(500, $"Failed to upload file to external storage. Please try again later. Error Message: {e.Message}");
             }
             await _userService.SetAvatart(userName, newAvatarKey);
             if (currentAvatarKey != null) await _awsService.DeleteFile(currentAvatarKey);
