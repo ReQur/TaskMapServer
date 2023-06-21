@@ -327,7 +327,6 @@ namespace dotnetserver.Controllers
             if (userName is null) return Unauthorized();
 
             var newAvatarKey = userName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            var currentAvatarKey = (await _userService.GetUserData(userName)).avatar;
             try
             {
                 await _awsService.Upload(avatar, newAvatarKey);
@@ -338,7 +337,6 @@ namespace dotnetserver.Controllers
                 return StatusCode(500, $"Failed to upload file to external storage. Please try again later. Error Message: {e.Message}");
             }
             await _userService.SetAvatart(userName, newAvatarKey);
-            if (currentAvatarKey != null) await _awsService.DeleteFile(currentAvatarKey);
             return Ok();
         }
 
