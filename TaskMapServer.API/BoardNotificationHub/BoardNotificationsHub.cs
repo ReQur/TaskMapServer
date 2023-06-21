@@ -41,6 +41,13 @@ namespace dotnetserver.BoardNotificationHub
             await Clients.OthersInGroup(boardId.ToString()).SendAsync("BoardChangedNotification", boardId.ToString());
         }
 
+        public async Task ShareBoardNotification(uint[] userIds)
+        {
+            _logger.LogInformation($"New board shared to users {userIds}");
+            var strUserIds = Array.ConvertAll<uint, string>(userIds, input => input.ToString());
+            await Clients.Users(strUserIds).SendAsync("ShareBoardNotification");
+        }
+
         /// <summary>
         /// Joins a user to a specific board.
         /// </summary>
