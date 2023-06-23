@@ -313,7 +313,9 @@ namespace dotnetserver.Controllers
         [HttpPatch("last-board/{boardId}")]
         public async Task<IActionResult> SetLastBoard(string boardId)
         {
-            await _userService.SetLastBoardId(boardId);
+            var userName = User.Identity?.Name;
+            var userId = await _userService.GetUserId(userName);
+            await _userService.SetLastBoardId(boardId, userId.ToString());
             return Ok();
         }
 
@@ -325,18 +327,30 @@ namespace dotnetserver.Controllers
             if (userName is null) return Unauthorized();
 
             var newAvatarKey = userName + "_" + DateTime.Now.ToString("yyyyMMddHHmmss");
-            var currentAvatarKey = (await _userService.GetUserData(userName)).avatar;
             try
             {
                 await _awsService.Upload(avatar, newAvatarKey);
             }
-            catch
+            catch (Exception e)
             {
-                return StatusCode(500, "Failed to upload file to external storage. Please try again later.");
+                _logger.LogError($"An exception occured during load the avatar: {e.Message}");
+                return StatusCode(500, $"Failed to upload file to external storage. Please try again later. Error Message: {e.Message}");
             }
             await _userService.SetAvatart(userName, newAvatarKey);
-            if (currentAvatarKey != null) await _awsService.DeleteFile(currentAvatarKey);
             return Ok();
+        }
+
+        /// <summary>
+        /// Returns Id of last board that was used by user.
+        /// </summary>
+        /// <returns>user.lastBoardId</returns>
+        /// <response code="401">If user unauthorized</response>
+        /// <response code="200">Success</response>
+        [HttpGet("list")]
+        public async Task<IActionResult> GetLUserList()
+        {
+            var users = await _userService.GetUserList();
+            return Ok(users);
         }
     }
 }

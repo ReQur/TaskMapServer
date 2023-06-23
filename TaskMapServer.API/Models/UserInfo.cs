@@ -58,4 +58,11 @@ namespace dotnetserver.Models
         public string AccessToken { get; set; }
     }
 
+    public class UserForList
+    {
+        public string username { get; set; }
+        public string? avatar { get; set; }
+        public uint userId { get; set; }
+
+    }
 }

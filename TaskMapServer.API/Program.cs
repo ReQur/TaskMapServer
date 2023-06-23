@@ -9,7 +9,10 @@ using System.Configuration;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authorization;
+using Serilog.Extensions.Logging.File;
 using System.Security.Claims;
+using dotnetserver.Controllers;
+using dotnetserver.BoardNotificationHub;
 
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -57,19 +60,37 @@ builder.Services.AddScoped<IClientLogService, ClientLogService>();
 builder.Services.AddScoped<IAWSService, AWSService>();
 
 
-builder.Services.AddCors(options =>
+if (builder.Environment.IsDevelopment())
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy =>
-        {
-            policy.SetIsOriginAllowed(_ => true);
-            policy.AllowAnyMethod();
-            policy.AllowAnyHeader();
-            policy.AllowCredentials();
-            policy.WithExposedHeaders();
-        });
-}); ;
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+            policy =>
+            {
+                policy.SetIsOriginAllowed(_ => true);
+                policy.AllowAnyMethod();
+                policy.AllowAnyHeader();
+                policy.AllowCredentials();
+                policy.WithExposedHeaders();
+            });
+    }); ;
+}
+else
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+            policy =>
+            {
+                policy.AllowAnyMethod();
+                policy.AllowAnyHeader();
+                policy.AllowCredentials();
+                policy.WithExposedHeaders();
+            });
+    }); ;
+}
 
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -107,6 +128,9 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+var loggerFactory = app.Services.GetService<ILoggerFactory>();
+loggerFactory.AddFile(builder.Configuration["Logging:LogFilePath"].ToString());
+
 app.MigrateDatabase();
 
 
@@ -126,5 +150,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<BoardNotificationsHub>("/notificationHub");
 
 app.Run();

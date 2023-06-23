@@ -36,6 +36,7 @@ namespace dotnetserver
             s3client = new AmazonS3Client(configsS3);
             if (!Directory.Exists(tmpDir))
                 Directory.CreateDirectory(tmpDir);
+
         }
 
         public async Task Upload(IFormFile file, string key)

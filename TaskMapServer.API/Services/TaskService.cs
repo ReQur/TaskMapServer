@@ -10,6 +10,7 @@ namespace dotnetserver
     public interface ITaskService
     {
         Task<BoardTask> EditTask(BoardTask newTask);
+        Task<BoardTask> GetTask(string _taskId);
         Task<BoardTask[]> GetBoardTasks(string boardId);
         Task AddTask(BoardTask newTask);
         Task DeleteTask(string _taskId);
@@ -60,6 +61,13 @@ namespace dotnetserver
                             SET next_task_id = LAST_INSERT_ID()
                             WHERE boardId = @boardId AND next_task_id IS NULL AND taskId <> LAST_INSERT_ID();";
             await DbExecuteAsync(sql, newTask, transaction: true);
+        }
+        public async Task<BoardTask> GetTask(string _taskId)
+        {
+            var parameters = new { taskId = _taskId };
+            var sql = @"SELECT * FROM task WHERE taskId = @taskId;";
+            var tasks = await DbQueryAsync<BoardTask>(sql, parameters, transaction: true);
+            return tasks.Last();
         }
 
         public async Task DeleteTask(string _taskId)

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using dotnetserver.BoardNotificationHub;
 using dotnetserver.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
 
@@ -19,12 +21,14 @@ namespace dotnetserver.Controllers
         private readonly ILogger<BoardController> _logger;
         private readonly IUserService _userService;
         private readonly ITaskService _taskService;
+        private readonly IHubContext<BoardNotificationsHub> _boardHubContext;
 
-        public TaskController(ILogger<BoardController> logger, IUserService userService, ITaskService taskService)
+        public TaskController(ILogger<BoardController> logger, IUserService userService, ITaskService taskService, IHubContext<BoardNotificationsHub> boardHubContext)
         {
             _logger = logger;
             _userService = userService;
             _taskService = taskService;
+            _boardHubContext = boardHubContext;
         }
 
         /// <summary>
@@ -107,7 +111,6 @@ namespace dotnetserver.Controllers
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(Boolean), 200)]
         [HttpDelete("{taskId}")]
-        [AllowAnonymous]
         public async Task<IActionResult> DeleteTask(uint taskId)
         {
             try
@@ -137,18 +140,18 @@ namespace dotnetserver.Controllers
         /// <response code="200">Success</response>
         [ProducesResponseType(typeof(Boolean), 200)]
         [HttpPut("list/{taskIdToMove}&{boardId}&{insertAfterId}")]
-        [AllowAnonymous]
         public async Task<IActionResult> UpdateTaskPriority(uint taskIdToMove, uint boardId, uint insertAfterId)
         {
             try
             {
+                var currentBoard = (await _taskService.GetTask(taskIdToMove.ToString())).boardId;
                 await _taskService.UpdatePriority(taskIdToMove, insertAfterId, boardId);
                 return Ok(true);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return Problem(detail: "Exception due deleting task:\n" + ex.Message, statusCode: 500);
+                return Problem(detail: "Exception due Updating Task Priority:\n" + ex.Message, statusCode: 500);
             }
         }
 
