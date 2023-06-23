@@ -111,7 +111,7 @@ namespace dotnetserver
         public async Task<uint> RegisterUser(SignUpUser user)
         {
             var sql = @"INSERT INTO user(username, firstName, lastName, password, avatar) 
-                            VALUES(@username, @firstName, @lastName, @password, 'default_avatar');
+                            VALUES(@username, @firstName, @lastName, @password, @avatar);
                         SELECT LAST_INSERT_ID() INTO @_userId;
                         INSERT INTO board(userId, boardName,  boardDescription) 
                             VALUES(@_userId, 'Default', 'Your first board');

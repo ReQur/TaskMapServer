@@ -123,7 +123,7 @@ namespace dotnetserver.Controllers
                     username = payload.Email,
                     firstName = payload.Name,
                     lastName = payload.FamilyName,
-                    avatar = null,
+                    avatar = payload.Picture,
                     password = RandomAlphaNumericString.Generate(10)
                 });
             }
@@ -172,7 +172,7 @@ namespace dotnetserver.Controllers
             if (await _userService.IsAnExistingUser(request.username))
                 return Unauthorized();
 
-
+            request.avatar = _baseAvatarUrl + "default_avatar";
             var userId = await _userService.RegisterUser(request);
 
             if (userId == 0)
@@ -223,7 +223,7 @@ namespace dotnetserver.Controllers
                 firstName = user.firstName,
                 lastName = user.lastName,
                 lastBoardId = user.lastBoardId,
-                avatar = _baseAvatarUrl + user.avatar
+                avatar = user.avatar
             });
         }
 
@@ -336,7 +336,7 @@ namespace dotnetserver.Controllers
                 _logger.LogError($"An exception occured during load the avatar: {e.Message}");
                 return StatusCode(500, $"Failed to upload file to external storage. Please try again later. Error Message: {e.Message}");
             }
-            await _userService.SetAvatart(userName, newAvatarKey);
+            await _userService.SetAvatart(userName, _baseAvatarUrl + newAvatarKey);
             return Ok();
         }
 

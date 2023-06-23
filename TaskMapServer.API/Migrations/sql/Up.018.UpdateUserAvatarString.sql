@@ -1,0 +1,1 @@
+UPDATE user SET avatar = CONCAT('https://storage.yandexcloud.net/tm-bucket/', avatar) WHERE 1;
